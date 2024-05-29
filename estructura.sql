@@ -1,127 +1,378 @@
+
+
+gamaProducto
+
+pais
+
+Region
+
+Ciudad
+
+puesto
+
+estadoPedido
+
+tipodepago
+
+tipoTelefono
+
+formaPago
+
+oficina
+
+telefono_oficina----------> tipo_telefono ,oficina
+
+direccion_oficina----------> pais, oficina
+
+empleado---------> oficina, jefe, puesto
+
+contacto
+
+cliente -----------> empleado, contacto
+
+pago -------------> cliente, formaPago, tipoPago
+
+telefonoCliente -----------> cliente, tipoTelefono 
+
+direccionCliente ----------> cliente, pais, region, ciudad
+
+producto ----------------> gamaProducto
+
+proveedor
+
+telefonoProveedor-----------> tipoTelefono, proveedor
+
+direccionProveedor ------------> proveedor, pais, region, ciudad
+
+precio-------------> proveeedor, producto
+
+pedido ------------> pago, estadoPedido, cliente
+
+detallePedido ---------> pedido, producto
+
+--------------
+----------
+----------------------------
+---------------
+
+
+
+
+
 CREATE TABLE gama_producto (
-id INT,
-descripcion_texto TEXT NULL,
-descripcion_html TEXT NULL,
-imagen VARCHAR(256) NULL,
-CONSTRAINT PK_GamaProducto_id PRIMARY KEY(id)
+	id INT(7),
+	descripcion_texto TEXT NULL,
+	descripcion_html TEXT NULL,
+	imagen VARCHAR(256) NULL,
+	CONSTRAINT PK_GamaProducto_Id PRIMARY KEY(id)
 );
 
-CREATE TABLE tipoTelefono(
+CREATE TABLE pais (
 	id INT(7),
-	tipo VARCHAR(20) NOT NULL,
+	nombre VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_Pais_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE region (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_Region_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE ciudad (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	codigo_postal VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_Ciudad_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE puesto (
+	id INT(7),
+	puesto VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_Puesto_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE estado_pedido (
+	id INT(7),
+	estado VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_EstadoPedido_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE tipo_pago (
+	id INT(7),
+	tipo VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_TipoPago_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE tipo_telefono (
+	id INT(7),
+	tipo VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_TipoTelefono_Id PRIMARY KEY(id)
 );
 
-CREATE TABLE telefono(
-	id INT(7),telefono_id INT(7),
-	tipo_telefono_id INT(7),
-	numero VARCHAR(20) NOT NULL,
-	CONSTRAINT PK_Telefono_Id PRIMARY KEY(id),
-	CONSTRAINT FK_TipoTelefono_Telefono_Id FOREIGN KEY(tipo_telefono_id) REFERENCES tipoTelefono(id)
+CREATE TABLE forma_pago (
+	id INT(7),
+	forma VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_FormaPago_Id PRIMARY KEY(id)
 );
 
-CREATE TABLE direccion(
+CREATE TABLE oficina (
 	id INT(7),
-	
-	
-	CONSTRAINT PK_Direccion_Id PRIMARY KEY(id)
+	nombre VARCHAR(50),
+	CONSTRAINT PK_Oficina_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE telefono_oficina (
+	id INT(7),
+	oficina_id INT(7),
+	tipo_id INT(7),
+	numero VARCHAR(30),
+	CONSTRAINT PK_TelefonoOficina_Id PRIMARY KEY(id),
+	CONSTRAINT FK_TipoTelefono_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id),
+	CONSTRAINT FK_Oficina_Id FOREIGN KEY(oficina_id) REFERENCES oficina(id)
+);
+
+CREATE TABLE direccion_oficina (
+	id INT(7),
+	oficina_id INT(7),
+	pais_id INT(7),
+	region_id INT(7),
+	ciudad_id INT(7),
+	detalle TEXT NOT NULL,
+	CONSTRAINT PK_DireccionOficina_Id PRIMARY KEY(id)
+	CONSTRAINT FK_Oficina_Id FOREIGN KEY(oficina_id) REFERENCES oficina(id),
+	CONSTRAINT FK_Pais_Id FOREIGN KEY(pais_id) REFERENCES pais(id),
+	CONSTRAINT FK_Region_Id FOREIGN KEY(region_id) REFERENCES region(id),
+	CONSTRAINT FK_Ciudad_Id FOREIGN KEY(ciudad_id) REFERENCES ciudad(id),
+);
+
+CREATE TABLE empleado (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	apellido1 VARCHAR(50) NOT NULL,
+	apellido2 VARCHAR(50) NOT NULL,
+	extension VARCHAR(10) NOT NULL,
+	email VARCHAR(10) NOT NULL,
+	oficina_id INT(7),
+	jefe_id INT(7) NULL,
+	puesto_id INT(7),
+	CONSTRAINT PK_Empleado_Id PRIMARY KEY(id),
+	CONSTRAINT FK_Oficina_Id FOREIGN KEY(oficina_id) REFERENCES oficina(id), 
+	CONSTRAINT FK_Jefe_Id FOREIGN KEY (jefe_id) REFERENCES empleado(id),
+	CONSTRAINT FK_Puesto_Id FOREIGN KEY(puesto_id) REFERENCES puesto(id)
+);
+
+CREATE TABLE contacto (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	apellido VARCHAR(50) NOT NULL,
+	email VARCHAR(10) NOT NULL,
+	CONSTRAINT PK_Contacto_Id PRIMARY KEY(id)
+);
+
+CREATE TABLE cliente (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	contacto_id INT(7),
+	empleado_id INT(7),
+	limite_credito DECIMAL(15,2) NULL,
+	CONSTRAINT PK_Cliente_Id PRIMARY KEY(id),
+	CONSTRAINT FK_Contacto_Id FOREIGN KEY (contacto_id) REFERENCES contacto(id), 
+	CONSTRAINT FK_Empleado_Id FOREIGN KEY (empleado_id) REFERENCES empleado(id)
+);
+
+CREATE TABLE pago (
+	id INT(7),
+	cliente_id INT(7),
+	forma_pago_id INT(7),
+	tipo_pago_id INT(7),
+	fecha_pago DATE NOT NULL,
+	total DECIMAL (15,2) NOT NULL,
+	CONSTRAINT PK_Transaccion_Id PRIMARY KEY(id_transaccion),
+	CONSTRAINT FK_Cliente_Id FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+	CONSTRAINT FK_FormaPago_Id FOREIGN KEY (forma_pago_id) REFERENCES forma_pago(id),
+	CONSTRAINT FK_TipoPago_Id FOREIGN KEY (tipo_pago_id) REFERENCES tipo_pago(id)
+);
+
+CREATE TABLE telefono_cliente (
+	id INT(7),
+	cliente_id INT(7),
+	tipo_id INT(7),
+	numero VARCHAR(30),
+	CONSTRAINT PK_TelefonoCliente_Id PRIMARY KEY(id),
+	CONSTRAINT FK_Cliente_Id FOREIGN KEY(cliente_id) REFERENCES cliente(id),
+	CONSTRAINT FK_TipoTelefono_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id)
+);
+
+CREATE TABLE direccion_cliente (
+	id INT(7),
+	cliente_id INT(7),
+	pais_id INT(7),
+	region_id INT(7),
+	ciudad_id INT(7),
+	detalle TEXT NOT NULL,
+	CONSTRAINT PK_DireccionCliente_Id PRIMARY KEY(id)
+	CONSTRAINT FK_Cliente_Id FOREIGN KEY(cliente_id) REFERENCES cliente(id),
+	CONSTRAINT FK_Pais_Id FOREIGN KEY(pais_id) REFERENCES pais(id),
+	CONSTRAINT FK_Region_Id FOREIGN KEY(region_id) REFERENCES region(id),
+	CONSTRAINT FK_Ciudad_Id FOREIGN KEY(ciudad_id) REFERENCES ciudad(id),
+);
+
+CREATE TABLE producto (
+	id INT(7),
+	nombre VARCHAR(50) NOT NULL,
+	gama_id INT(7),
+	dimensiones VARCHAR(25) NULL,
+	descripcion TEXT NULL,
+	cantidad_en_stock SMALLINT(6) NOT NULL,
+	CONSTRAINT PK_Producto_Id PRIMARY KEY(id),
+	CONSTRAINT FK_GamaProducto_Id FOREIGN KEY(gama) REFERENCES gama_producto(id)
 );
 
 CREATE TABLE proveedor(
 	id INT(7),
 	nombre VARCHAR(70) NOT NULL,
-	telefono_id INT(7),
-	direccion_id INT(7),
-	CONSTRAINT PK_Proveedor_Id PRIMARY KEY(id),
-	CONSTRAINT FK_Telefono_Proveedor_Id FOREIGN KEY(telefono_id) REFERENCES telefono(id),
-	CONSTRAINT FK_Direccion_Proveedor_Id FOREIGN KEY(direccion_id) REFERENCES direccion(id)
+	CONSTRAINT PK_Proveedor_Id PRIMARY KEY(id)
 );
 
-create table producto (
-codigo_producto VARCHAR(15),
-nombre VARCHAR(70) not null,
-gama VARCHAR(50),
-dimensiones VARCHAR(25) null,
-proveedor VARCHAR(50) null,
-descripcion TEXT null,
-cantidad_en_stock SMALLINT(6) not null,
-precio_venta DECIMAL(15,2) not null,
-precio_proveedor DECIMAL(12,2) null,
-CONSTRAINT PK_CodigoProducto_Id PRIMARY KEY(codigo_producto),
-CONSTRAINT FK_GamaProducto_producto_Id FOREIGN KEY(gama) REFERENCES gama_producto(id)
+CREATE TABLE telefono_proveedor(
+	id INT(7),
+	proveedor_id INT(7),
+	tipo_id INT(7),
+	numero VARCHAR(30),
+	CONSTRAINT PK_TelefonoProveedor_Id PRIMARY KEY(id),
+	CONSTRAINT FK_proveedor_Id FOREIGN KEY(proveedor_id) REFERENCES proveedor(id),
+	CONSTRAINT FK_TipoTelefono_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id)
 );
 
-create table oficina (
-codigo_oficina VARCHAR(10),proveedor
-ciudad VARCHAR(30) not null,
-pais VARCHAR(50) not null,
-region VARCHAR(50) null,
-codigo_postal VARCHAR(10) not null,
-telefono VARCHAR(20) not null,
-linea_direccion1 VARCHAR(50) not null,
-linea_direccion2 VARCHAR(50) null
-CONSTRAINT PK_codigoOficina_id PRIMARY KEY(codigo_oficina)
+CREATE TABLE direccion_proveedor (
+	id INT(7),
+	proveedor_id INT(7),
+	pais_id INT(7),
+	region_id INT(7),
+	ciudad_id INT(7),
+	detalle TEXT NOT NULL,
+	CONSTRAINT PK_DireccionProveedor_Id PRIMARY KEY(id)
+	CONSTRAINT FK_Proveedor_Id FOREIGN KEY(proveedor_id) REFERENCES proveedor(id),
+	CONSTRAINT FK_Pais_Id FOREIGN KEY(pais_id) REFERENCES pais(id),
+	CONSTRAINT FK_Region_Id FOREIGN KEY(region_id) REFERENCES region(id),
+	CONSTRAINT FK_Ciudad_Id FOREIGN KEY(ciudad_id) REFERENCES ciudad(id),
+);
+
+CREATE TABLE precio (
+	producto_id INT(7),
+	precio_venta DECIMAL(15, 2) NOT NULL,
+	proveedor_id INT(7),
+	precio_proveedor DECIMAL(15, 2) NOT NULL,
+	CONSTRAINT PK_precio_Id PRIMARY KEY(producto_id, proveedor_id),
+	CONSTRAINT FK_Producto_Id FOREIGN KEY(producto_id) REFERENCES producto(id),
+	CONSTRAINT FK_Proveedor_Id FOREIGN KEY(proveedor_id) REFERENCES proveedor(id)
+);
+
+CREATE TABLE pedido (
+	id INT(7),
+	fecha_pedido DATE NOT NULL,
+	fecha_esperada DATE NOT NULL,
+	fecha_entrega DATE NOT NULL,
+	estado_pedido_id INT(7),
+	cliente_id INT(7),
+	pago_id INT(7),
+	comentarios TEXT NULL,
+	CONSTRAINT PK_Pedido_Id PRIMARY KEY(id),
+	CONSTRAINT FK_EstadoPedido_Id FOREIGN KEY (estado_pedido_id) REFERENCES estado_pedido(id),
+	CONSTRAINT FK_Cliente_Id FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+	CONSTRAINT FK_Pago_Id FOREIGN KEY (pago_id) REFERENCES pago(id)
+);
+
+CREATE TABLE detalle_pedido (
+	producto_id INT(7),
+	pedido_id INT(7),
+	cantidad INT(10) NOT NULL,
+	numero_linea SMALLINT(6) NOT NULL,
+	CONSTRAINT PK_DetallePedido_Id PRIMARY KEY(producto_id, pedido_id),
+	CONSTRAINT FK_Producto_Id FOREIGN KEY (producto_id) REFERENCES producto(id),
+	CONSTRAINT FK_Pedido_Id FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
 
 
-create table empleado (
-codigo_empleado INT(11) primary key,
-nombre VARCHAR(50) not null,
-apellido1 VARCHAR(50) not null,
-apellido2 VARCHAR(50) null,
-extension VARCHAR(10) not null,
-email VARCHAR(10) not null,
-codigo_oficina VARCHAR(10) not null,
-codigo_jefe INT(11) null,
-puesto VARCHAR(50) null,
-FOREIGN KEY (codigo_jefe) REFERENCES empleado (codigo_empleado),
-FOREIGN KEY (codigo_oficina) REFERENCES oficina (codigo_oficina)
-);
 
-create table cliente (
-codigo_cliente INT(11) primary key,
-nombre_cliente VARCHAR(50) not null,
-nombre_contacto VARCHAR(30) null,
-apellido_contacto VARCHAR(30) null,
-telefono VARCHAR(15) not null,
-fax VARCHAR(15) not null,
-linea_direccion1 VARCHAR(50) not null,
-linea_direccion2 VARCHAR(50) null,
-ciudad VARCHAR(50) not null,
-region VARCHAR(50) null,
-pais VARCHAR(50) null,
-codigo_postal VARCHAR(10) null,
-codigo_empleado_rep_ventas INT(11) null,
-limite_credito DECIMAL(15,2) null,
-FOREIGN KEY (codigo_empleado_rep_ventas) REFERENCES empleado (codigo_empleado)
-);
 
-create table pago (
-codigo_cliente INT(11),
-forma_pago VARCHAR(40) not null,
-id_transaccion VARCHAR(50) primary key,
-fecha_pago DATE not null,
-total DECIMAL (15,2) not null,
-FOREIGN KEY (codigo_cliente) REFERENCES cliente (codigo_cliente)
-);
 
-create table pedido (
-codigo_pedido INT(11) primary key,
-fecha_pedido DATE not null,
-fecha_esperada DATE not null,
-fecha_entrega DATE null,
-estado VARCHAR(15) not null,
-comentarios TEXT null,
-codigo_cliente INT(11),
-FOREIGN KEY (codigo_cliente) REFERENCES cliente (codigo_cliente)
-);
 
-create table detalle_pedido (
-codigo_pedido INT(11),
-codigo_producto VARCHAR(15),
-cantidad INT(11) not null,
-precio_unidad DECIMAL(15,2) not null,
-numero_linea SMALLINT(6) not null,
-FOREIGN KEY (codigo_pedido) REFERENCES pedido (codigo_pedido),
-FOREIGN KEY (codigo_producto) REFERENCES producto (codigo_producto)
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
