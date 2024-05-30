@@ -11,7 +11,6 @@ CREATE DATABASE gardenDb;
 -- Seleccion de la base de datos
 USE gardenDb;
 
--- Lista de gama de productos
 CREATE TABLE gama_producto (
 	id INT(7) AUTO_INCREMENT,
 	descripcion_texto TEXT NULL,
@@ -20,7 +19,6 @@ CREATE TABLE gama_producto (
 	CONSTRAINT PK_GamaProducto_Id PRIMARY KEY(id)
 );
 
--- Lista de pais
 CREATE TABLE pais (
 	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
@@ -79,7 +77,7 @@ CREATE TABLE telefono_oficina (
 	id INT(7) AUTO_INCREMENT,
 	oficina_id INT(7),
 	tipo_id INT(7),
-	numero VARCHAR(30) UNIQUE,
+	numero VARCHAR(50) UNIQUE,
 	CONSTRAINT PK_TelefonoOficina_Id PRIMARY KEY(id),
 	CONSTRAINT FK_TipoTelefono_TelefonoOficina_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id),
 	CONSTRAINT FK_Oficina_TelefonoOficina_Id FOREIGN KEY(oficina_id) REFERENCES oficina(id)
@@ -104,8 +102,8 @@ CREATE TABLE empleado (
 	nombre VARCHAR(50) NOT NULL,
 	apellido1 VARCHAR(50) NOT NULL,
 	apellido2 VARCHAR(50) NOT NULL,
-	extension VARCHAR(10) NOT NULL,
-	email VARCHAR(10) NOT NULL,
+	extension VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
 	oficina_id INT(7),
 	jefe_id INT(7) NULL,
 	puesto_id INT(7),
@@ -119,7 +117,7 @@ CREATE TABLE contacto (
 	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	apellido VARCHAR(50) NOT NULL,
-	email VARCHAR(10) NOT NULL,
+	email VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_Contacto_Id PRIMARY KEY(id)
 );
 
@@ -151,7 +149,7 @@ CREATE TABLE telefono_cliente (
 	id INT(7) AUTO_INCREMENT,
 	cliente_id INT(7),
 	tipo_id INT(7),
-	numero VARCHAR(30) UNIQUE,
+	numero VARCHAR(50) UNIQUE,
 	CONSTRAINT PK_TelefonoCliente_Id PRIMARY KEY(id),
 	CONSTRAINT FK_Cliente_TelefonoCliente_Id FOREIGN KEY(cliente_id) REFERENCES cliente(id),
 	CONSTRAINT FK_TipoTelefono_TelefonoCliente_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id)
@@ -192,7 +190,7 @@ CREATE TABLE telefono_proveedor(
 	id INT(7) AUTO_INCREMENT,
 	proveedor_id INT(7),
 	tipo_id INT(7),
-	numero VARCHAR(30),
+	numero VARCHAR(50),
 	CONSTRAINT PK_TelefonoProveedor_Id PRIMARY KEY(id),
 	CONSTRAINT FK_proveedor_TelefonoProveedor_Id FOREIGN KEY(proveedor_id) REFERENCES proveedor(id),
 	CONSTRAINT FK_TipoTelefono_TelefonoProveedor_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id)
