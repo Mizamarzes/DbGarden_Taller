@@ -1,6 +1,9 @@
 -- #############################################
 -- ######### ESTRUCTURA BASE DE DATOS ##########
 -- #############################################
+-- Estructura de una base de datos para productos de jardineria
+-- Con su servicio de inventario, pedidos, clientes, empleados y demas
+
 
 -- Creacion de la base de datos
 CREATE DATABASE gardenDb;
@@ -10,7 +13,7 @@ USE gardenDb;
 
 -- Lista de gama de productos
 CREATE TABLE gama_producto (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	descripcion_texto TEXT NULL,
 	descripcion_html TEXT NULL,
 	imagen VARCHAR(256) NULL,
@@ -19,62 +22,58 @@ CREATE TABLE gama_producto (
 
 -- Lista de pais
 CREATE TABLE pais (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_Pais_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE region (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_Region_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE ciudad (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	codigo_postal VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_Ciudad_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE puesto (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	puesto VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_Puesto_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE estado_pedido (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	estado VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_EstadoPedido_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE tipo_pago (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	tipo VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_TipoPago_Id PRIMARY KEY(id)
 );
 
-CREATE TABLE tipo_telefono (
-	id INT(7) AUTO_INCREMENT UNIQUE,
-	tipo VARCHAR(50) NOT NULL,
-	CONSTRAINT PK_TipoTelefono_Id PRIMARY KEY(id)
-);
+c
 
 CREATE TABLE forma_pago (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	forma VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_FormaPago_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE oficina (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50),
 	CONSTRAINT PK_Oficina_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE telefono_oficina (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	oficina_id INT(7),
 	tipo_id INT(7),
 	numero VARCHAR(30) UNIQUE,
@@ -84,7 +83,7 @@ CREATE TABLE telefono_oficina (
 );
 
 CREATE TABLE direccion_oficina (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	oficina_id INT(7),
 	pais_id INT(7),
 	region_id INT(7),
@@ -98,7 +97,7 @@ CREATE TABLE direccion_oficina (
 );
 
 CREATE TABLE empleado (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	apellido1 VARCHAR(50) NOT NULL,
 	apellido2 VARCHAR(50) NOT NULL,
@@ -114,7 +113,7 @@ CREATE TABLE empleado (
 );
 
 CREATE TABLE contacto (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	apellido VARCHAR(50) NOT NULL,
 	email VARCHAR(10) NOT NULL,
@@ -122,7 +121,7 @@ CREATE TABLE contacto (
 );
 
 CREATE TABLE cliente (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	contacto_id INT(7),
 	empleado_id INT(7),
@@ -133,7 +132,7 @@ CREATE TABLE cliente (
 );
 
 CREATE TABLE pago (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	cliente_id INT(7),
 	forma_pago_id INT(7),
 	tipo_pago_id INT(7),
@@ -146,7 +145,7 @@ CREATE TABLE pago (
 );
 
 CREATE TABLE telefono_cliente (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	cliente_id INT(7),
 	tipo_id INT(7),
 	numero VARCHAR(30) UNIQUE,
@@ -156,7 +155,7 @@ CREATE TABLE telefono_cliente (
 );
 
 CREATE TABLE direccion_cliente (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	cliente_id INT(7),
 	pais_id INT(7),
 	region_id INT(7),
@@ -170,7 +169,7 @@ CREATE TABLE direccion_cliente (
 );
 
 CREATE TABLE producto (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	gama_id INT(7),
 	dimensiones VARCHAR(25) NULL,
@@ -181,13 +180,13 @@ CREATE TABLE producto (
 );
 
 CREATE TABLE proveedor(
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	nombre VARCHAR(70) NOT NULL,
 	CONSTRAINT PK_Proveedor_Id PRIMARY KEY(id)
 );
 
 CREATE TABLE telefono_proveedor(
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	proveedor_id INT(7),
 	tipo_id INT(7),
 	numero VARCHAR(30),
@@ -197,7 +196,7 @@ CREATE TABLE telefono_proveedor(
 );
 
 CREATE TABLE direccion_proveedor (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	proveedor_id INT(7),
 	pais_id INT(7),
 	region_id INT(7),
@@ -221,7 +220,7 @@ CREATE TABLE precio (
 );
 
 CREATE TABLE pedido (
-	id INT(7) AUTO_INCREMENT UNIQUE,
+	id INT(7) AUTO_INCREMENT,
 	fecha_pedido DATE NOT NULL,
 	fecha_esperada DATE NOT NULL,
 	fecha_entrega DATE NOT NULL,
@@ -245,7 +244,8 @@ CREATE TABLE detalle_pedido (
 	CONSTRAINT FK_Pedido_Pedido_Id FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
 
--- ---------------- NOMBRES DE TABLAS --------------------------------------
+-- ---------------- NOMBRES DE TABLAS Y ORGANIZACION --------------------------------------
+-- ---------------- BOCETO DE RELACIONES -----------------------------------
 
 -- gamaProducto
 
