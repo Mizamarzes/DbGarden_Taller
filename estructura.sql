@@ -57,8 +57,11 @@ CREATE TABLE tipo_pago (
 	tipo VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_TipoPago_Id PRIMARY KEY(id)
 );
-
-c
+CREATE TABLE tipo_telefono (
+	id INT(7),
+	tipo VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_TipoTelefono_Id PRIMARY KEY(id)
+);
 
 CREATE TABLE forma_pago (
 	id INT(7) AUTO_INCREMENT,
