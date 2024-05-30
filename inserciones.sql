@@ -328,4 +328,3 @@ INSERT INTO detalle_pedido (producto_id, pedido_id, cantidad, numero_linea) VALU
     (9, 6, 1, 1),   -- 1 unidad del producto 9 en el pedido 6
     (10, 7, 5, 1);  -- 5 unidades del producto 10 en el pedido 7
 
--- Devolop for Juan Contreras - C.C:1.***.***.782

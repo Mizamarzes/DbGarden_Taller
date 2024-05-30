@@ -4,7 +4,6 @@
 -- Estructura de una base de datos para productos de jardineria
 -- Con su servicio de inventario, pedidos, clientes, empleados y demas
 
-
 -- Creacion de la base de datos
 CREATE DATABASE gardenDb;
 
@@ -299,4 +298,3 @@ CREATE TABLE detalle_pedido (
 -- detallePedido ---------> pedido, producto
 
 
--- Devolop for Juan Contreras - C.C:1.***.***.782
