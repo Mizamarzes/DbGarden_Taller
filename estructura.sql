@@ -3,6 +3,7 @@
 -- #############################################
 -- Estructura de una base de datos para productos de jardineria
 -- Con su servicio de inventario, pedidos, clientes, empleados y demas
+-- Basado en el documento DbGarden.pdf
 
 -- Creacion de la base de datos
 CREATE DATABASE gardenDb;
@@ -243,58 +244,4 @@ CREATE TABLE detalle_pedido (
 	CONSTRAINT FK_Producto_Pedido_Id FOREIGN KEY (producto_id) REFERENCES producto(id),
 	CONSTRAINT FK_Pedido_Pedido_Id FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
-
--- ---------------- NOMBRES DE TABLAS Y ORGANIZACION --------------------------------------
--- ---------------- BOCETO DE RELACIONES -----------------------------------
-
--- gamaProducto
-
--- pais
-
--- Region
-
--- Ciudad
-
--- puesto
-
--- estadoPedido
-
--- tipodepago
-
--- tipoTelefono
-
--- formaPago
-
--- oficina
-
--- telefono_oficina----------> tipo_telefono ,oficina
-
--- direccion_oficina----------> pais, oficina
-
--- empleado---------> oficina, jefe, puesto
-
--- contacto
-
--- cliente -----------> empleado, contacto
-
--- pago -------------> cliente, formaPago, tipoPago
-
--- telefonoCliente -----------> cliente, tipoTelefono 
-
--- direccionCliente ----------> cliente, pais, region, ciudad
-
--- producto ----------------> gamaProducto
-
--- proveedor
-
--- telefonoProveedor-----------> tipoTelefono, proveedor
-
--- direccionProveedor ------------> proveedor, pais, region, ciudad
-
--- precio-------------> proveeedor, producto
-
--- pedido ------------> pago, estadoPedido, cliente
-
--- detallePedido ---------> pedido, producto
-
 
