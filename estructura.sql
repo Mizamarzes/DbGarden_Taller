@@ -1,59 +1,14 @@
--- gamaProducto
+-- #############################################
+-- ######### ESTRUCTURA BASE DE DATOS ##########
+-- #############################################
 
--- pais
+-- Creacion de la base de datos
+CREATE DATABASE gardenDb;
 
--- Region
+-- Seleccion de la base de datos
+USE gardenDb;
 
--- Ciudad
-
--- puesto
-
--- estadoPedido
-
--- tipodepago
-
--- tipoTelefono
-
--- formaPago
-
--- oficina
-
--- telefono_oficina----------> tipo_telefono ,oficina
-
--- direccion_oficina----------> pais, oficina
-
--- empleado---------> oficina, jefe, puesto
-
--- contacto
-
--- cliente -----------> empleado, contacto
-
--- pago -------------> cliente, formaPago, tipoPago
-
--- telefonoCliente -----------> cliente, tipoTelefono 
-
--- direccionCliente ----------> cliente, pais, region, ciudad
-
--- producto ----------------> gamaProducto
-
--- proveedor
-
--- telefonoProveedor-----------> tipoTelefono, proveedor
-
--- direccionProveedor ------------> proveedor, pais, region, ciudad
-
--- precio-------------> proveeedor, producto
-
--- pedido ------------> pago, estadoPedido, cliente
-
--- detallePedido ---------> pedido, producto
-
-
--- ----------------------------------------------------------------------------------------------
--- ----------------------------------------------------------------------------------------------
--- ---------------------------------------------------------------------------------------------
-
-
+-- Lista de gama de productos
 CREATE TABLE gama_producto (
 	id INT(7) AUTO_INCREMENT UNIQUE,
 	descripcion_texto TEXT NULL,
@@ -62,6 +17,7 @@ CREATE TABLE gama_producto (
 	CONSTRAINT PK_GamaProducto_Id PRIMARY KEY(id)
 );
 
+-- Lista de pais
 CREATE TABLE pais (
 	id INT(7) AUTO_INCREMENT UNIQUE,
 	nombre VARCHAR(50) NOT NULL,
@@ -289,83 +245,57 @@ CREATE TABLE detalle_pedido (
 	CONSTRAINT FK_Pedido_Pedido_Id FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
 
+-- ---------------- NOMBRES DE TABLAS --------------------------------------
 
+-- gamaProducto
 
+-- pais
 
+-- Region
 
+-- Ciudad
 
+-- puesto
 
+-- estadoPedido
 
+-- tipodepago
 
+-- tipoTelefono
 
+-- formaPago
 
+-- oficina
 
+-- telefono_oficina----------> tipo_telefono ,oficina
 
+-- direccion_oficina----------> pais, oficina
 
+-- empleado---------> oficina, jefe, puesto
 
+-- contacto
 
+-- cliente -----------> empleado, contacto
 
+-- pago -------------> cliente, formaPago, tipoPago
 
+-- telefonoCliente -----------> cliente, tipoTelefono 
 
+-- direccionCliente ----------> cliente, pais, region, ciudad
 
+-- producto ----------------> gamaProducto
 
+-- proveedor
 
+-- telefonoProveedor-----------> tipoTelefono, proveedor
 
+-- direccionProveedor ------------> proveedor, pais, region, ciudad
 
+-- precio-------------> proveeedor, producto
 
+-- pedido ------------> pago, estadoPedido, cliente
 
+-- detallePedido ---------> pedido, producto
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- Devolop for Juan Contreras - C.C:1.***.***.782
