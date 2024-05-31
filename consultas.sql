@@ -24,8 +24,24 @@ JOIN pais p ON d.pais_id = p.id
 WHERE p.nombre = 'España';
 
 -- 3.
+SELECT
+	nombre,
+	apellido1,
+	apellido2,
+	email
+FROM empleado
+WHERE jefe_id = 7;
 
 -- 4.
+SELECT
+	p.puesto,
+	e.nombre,
+	e.apellido1,
+	e.apellido2,
+	e.email
+FROM empleado AS e
+JOIN puesto AS p ON e.puesto_id = p.id
+WHERE jefe_id IS NULL;
 
 -- 5.
 

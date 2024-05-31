@@ -6,28 +6,38 @@
 
    ```mysql
    SELECT
-   	o.id as codigo_oficina,
-   	c.nombre as nombre_ciudad
+    o.id as codigo_oficina,
+    c.nombre as nombre_ciudad
    FROM oficina AS o 
    INNER JOIN direccion_oficina AS do ON o.id = do.oficina_id
    INNER JOIN ciudad AS c ON do.ciudad_id = c.id
    ORDER BY o.id;
-   +----------------+---------------+
-   | codigo_oficina | nombre_ciudad |
-   +----------------+---------------+
-   |              1 | Sevilla       |
-   |              2 | Barcelona     |
-   |              3 | Madrid        |
-   |              4 | Valencia      |
-   +----------------+---------------+
+   +----------------+------------------+
+   | codigo_oficina | nombre_ciudad    |
+   +----------------+------------------+
+   |              1 | Buenos Aires     |
+   |              2 | São Paulo        |
+   |              3 | Santiago         |
+   |              4 | Bogotá           |
+   |              5 | Quito            |
+   |              6 | Ciudad de México |
+   |              7 | Lima             |
+   |              8 | Montevideo       |
+   |              9 | Caracas          |
+   |             10 | Asunción         |
+   |             11 | Sevilla          |
+   |             12 | Barcelona        |
+   |             13 | Madrid           |
+   |             14 | Valencia         |
+   +----------------+------------------+
    ```
 
 2. Devuelve un listado con la ciudad y el teléfono de las oficinas de España.
 
    ```mysql
    SELECT 
-   	c.nombre AS ciudad, 
-   	t.numero AS telefono
+    c.nombre AS ciudad, 
+    t.numero AS telefono
    FROM telefono_oficina t
    JOIN oficina o ON t.oficina_id = o.id
    JOIN direccion_oficina d ON o.id = d.oficina_id
@@ -45,28 +55,57 @@
    ```
 
 3. Devuelve un listado con el nombre, apellidos y email de los empleados cuyo
-  jefe tiene un código de jefe igual a 7.
+    jefe tiene un código de jefe igual a 7.
 
   ```mysql
-  
+  SELECT
+  	nombre,
+  	apellido1,
+  	apellido2,
+  	email
+  FROM empleado
+  WHERE jefe_id = 7;
   ```
 
-  
-
 4. Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la
-  empresa.
+     empresa.
+
+     ```mysql
+     SELECT
+     	p.puesto,
+     	e.nombre,
+     	e.apellido1,
+     	e.apellido2,
+     	e.email
+     FROM empleado AS e
+     JOIN puesto AS p ON e.puesto_id = p.id
+     WHERE jefe_id IS NULL;
+     
+     +-----------------+--------+-----------+-----------+------------------+
+     | puesto          | nombre | apellido1 | apellido2 | email            |
+     +-----------------+--------+-----------+-----------+------------------+
+     | Gerente General | Juan   | García    | Pérez     | juan@example.com |
+     +-----------------+--------+-----------+-----------+------------------+
+     
+     ```
 
 5. Devuelve un listado con el nombre, apellidos y puesto de aquellos
-  empleados que no sean representantes de ventas.
+     empleados que no sean representantes de ventas.
+
+     ```mysql
+     
+     ```
+
+     
 
 6. Devuelve un listado con el nombre de los todos los clientes españoles.
 
 7. Devuelve un listado con los distintos estados por los que puede pasar un
-  pedido.
+     pedido.
 
 8. Devuelve un listado con el código de cliente de aquellos clientes que
-  realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar
-  aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
+     realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar
+       aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
 
   
 
@@ -79,8 +118,8 @@
     
 
 9. Devuelve un listado con el código de pedido, código de cliente, fecha
-  esperada y fecha de entrega de los pedidos que no han sido entregados a
-  tiempo.
+    esperada y fecha de entrega de los pedidos que no han sido entregados a
+    tiempo.
 
 10. Devuelve un listado con el código de pedido, código de cliente, fecha
     esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al
@@ -115,30 +154,30 @@
     sintaxis de SQL2 se deben resolver con INNER JOIN y NATURAL JOIN.
 
 16. Obtén un listado con el nombre de cada cliente y el nombre y apellido de su
-   representante de ventas.
+      representante de ventas.
 
 17. Muestra el nombre de los clientes que hayan realizado pagos junto con el
-   nombre de sus representantes de ventas.
+      nombre de sus representantes de ventas.
 
 18. Muestra el nombre de los clientes que no hayan realizado pagos junto con
-   el nombre de sus representantes de ventas.
+      el nombre de sus representantes de ventas.
 
 19. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus
-   representantes junto con la ciudad de la oficina a la que pertenece el
-   representante.
+      representantes junto con la ciudad de la oficina a la que pertenece el
+      representante.
 
 20. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre
-   de sus representantes junto con la ciudad de la oficina a la que pertenece el
-   representante.
+      de sus representantes junto con la ciudad de la oficina a la que pertenece el
+      representante.
 
 21. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
 
 22. Devuelve el nombre de los clientes y el nombre de sus representantes junto
-   con la ciudad de la oficina a la que pertenece el representante.8. Devuelve un listado con el nombre de los empleados junto con el nombre
-   de sus jefes.
+      con la ciudad de la oficina a la que pertenece el representante.8. Devuelve un listado con el nombre de los empleados junto con el nombre
+      de sus jefes.
 
 23. Devuelve un listado que muestre el nombre de cada empleados, el nombre
-   de su jefe y el nombre del jefe de sus jefe.
+      de su jefe y el nombre del jefe de sus jefe.
 
 24. Devuelve el nombre de los clientes a los que no se les ha entregado a
     tiempo un pedido.
@@ -150,30 +189,30 @@
     LEFT JOIN y NATURAL RIGHT JOIN.
 
 26. Devuelve un listado que muestre solamente los clientes que no han
-   realizado ningún pago.
+      realizado ningún pago.
 
 27. Devuelve un listado que muestre solamente los clientes que no han
-   realizado ningún pedido.
+      realizado ningún pedido.
 
 28. Devuelve un listado que muestre los clientes que no han realizado ningún
-   pago y los que no han realizado ningún pedido.
+      pago y los que no han realizado ningún pedido.
 
 29. Devuelve un listado que muestre solamente los empleados que no tienen
-   una oficina asociada.
+      una oficina asociada.
 
 30. Devuelve un listado que muestre solamente los empleados que no tienen un
-   cliente asociado.
+      cliente asociado.
 
 31. Devuelve un listado que muestre solamente los empleados que no tienen un
-   cliente asociado junto con los datos de la oficina donde trabajan.
+      cliente asociado junto con los datos de la oficina donde trabajan.
 
 32. Devuelve un listado que muestre los empleados que no tienen una oficina
-   asociada y los que no tienen un cliente asociado.
+      asociada y los que no tienen un cliente asociado.
 
 33. Devuelve un listado de los productos que nunca han aparecido en un
-   pedido.9. Devuelve un listado de los productos que nunca han aparecido en un
-   pedido. El resultado debe mostrar el nombre, la descripción y la imagen del
-   producto.
+      pedido.9. Devuelve un listado de los productos que nunca han aparecido en un
+      pedido. El resultado debe mostrar el nombre, la descripción y la imagen del
+      producto.
 
 34. Devuelve las oficinas donde no trabajan ninguno de los empleados que
     hayan sido los representantes de ventas de algún cliente que haya realizado
@@ -193,20 +232,20 @@
 39. ¿Cuál fue el pago medio en 2009?
 
 40. ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma
-   descendente por el número de pedidos.
+      descendente por el número de pedidos.
 
 41. Calcula el precio de venta del producto más caro y más barato en una
-   misma consulta.
+      misma consulta.
 
 42. Calcula el número de clientes que tiene la empresa.
 
 43. ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
 
 44. ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan
-   por M?
+      por M?
 
 45. Devuelve el nombre de los representantes de ventas y el número de clientes
-   al que atiende cada uno.
+      al que atiende cada uno.
 
 46. Calcula el número de clientes que no tiene asignado representante de
     ventas.
@@ -248,18 +287,18 @@
 56. Devuelve el nombre del producto que tenga el precio de venta más caro.
 
 57. Devuelve el nombre del producto del que se han vendido más unidades.
-   (Tenga en cuenta que tendrá que calcular cuál es el número total de
-   unidades que se han vendido de cada producto a partir de los datos de la
-   tabla detalle_pedido)4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya
-   realizado. (Sin utilizar INNER JOIN).
+      (Tenga en cuenta que tendrá que calcular cuál es el número total de
+      unidades que se han vendido de cada producto a partir de los datos de la
+      tabla detalle_pedido)4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya
+      realizado. (Sin utilizar INNER JOIN).
 
 58. Devuelve el producto que más unidades tiene en stock.
 
 59. Devuelve el producto que menos unidades tiene en stock.
 
 60. Devuelve el nombre, los apellidos y el email de los empleados que están a
-   cargo de Alberto Soria.
-   Subconsultas con ALL y ANY
+      cargo de Alberto Soria.
+      Subconsultas con ALL y ANY
 
 61. Devuelve el nombre del cliente con mayor límite de crédito.
 
@@ -306,25 +345,25 @@
     Consultas variadas
 
 75. Devuelve el listado de clientes indicando el nombre del cliente y cuántos
-   pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no
-   han realizado ningún pedido.
+      pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no
+      han realizado ningún pedido.
 
 76. Devuelve un listado con los nombres de los clientes y el total pagado por
-   cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han
-   realizado ningún pago.
+      cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han
+      realizado ningún pago.
 
 77. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008
-   ordenados alfabéticamente de menor a mayor.
+      ordenados alfabéticamente de menor a mayor.
 
 78. Devuelve el nombre del cliente, el nombre y primer apellido de su
-   representante de ventas y el número de teléfono de la oficina del
-   representante de ventas, de aquellos clientes que no hayan realizado ningún
-   pago.
+      representante de ventas y el número de teléfono de la oficina del
+      representante de ventas, de aquellos clientes que no hayan realizado ningún
+      pago.
 
 79. Devuelve el listado de clientes donde aparezca el nombre del cliente, el
-   nombre y primer apellido de su representante de ventas y la ciudad donde
-   está su oficina.
+      nombre y primer apellido de su representante de ventas y la ciudad donde
+      está su oficina.
 
 80. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos
-   empleados que no sean representante de ventas de ningún cliente.7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el
-   número de empleados que tiene.
+      empleados que no sean representante de ventas de ningún cliente.7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el
+      número de empleados que tiene.
