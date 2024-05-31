@@ -13,6 +13,15 @@ INNER JOIN ciudad AS c ON do.ciudad_id = c.id
 ORDER BY o.id;
 
 -- 2.
+SELECT 
+ c.nombre AS ciudad, 
+ t.numero AS telefono
+FROM telefono_oficina t
+JOIN oficina o ON t.oficina_id = o.id
+JOIN direccion_oficina d ON o.id = d.oficina_id
+JOIN ciudad c ON d.ciudad_id = c.id
+JOIN pais p ON d.pais_id = p.id
+WHERE p.nombre = 'España';
 
 -- 3.
 

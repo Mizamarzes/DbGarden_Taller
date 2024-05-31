@@ -77,7 +77,7 @@ CREATE TABLE telefono_oficina (
 	id INT(7) AUTO_INCREMENT,
 	oficina_id INT(7),
 	tipo_id INT(7),
-	numero VARCHAR(50) UNIQUE,
+	numero VARCHAR(50),
 	CONSTRAINT PK_TelefonoOficina_Id PRIMARY KEY(id),
 	CONSTRAINT FK_TipoTelefono_TelefonoOficina_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id),
 	CONSTRAINT FK_Oficina_TelefonoOficina_Id FOREIGN KEY(oficina_id) REFERENCES oficina(id)
@@ -149,7 +149,7 @@ CREATE TABLE telefono_cliente (
 	id INT(7) AUTO_INCREMENT,
 	cliente_id INT(7),
 	tipo_id INT(7),
-	numero VARCHAR(50) UNIQUE,
+	numero VARCHAR(50),
 	CONSTRAINT PK_TelefonoCliente_Id PRIMARY KEY(id),
 	CONSTRAINT FK_Cliente_TelefonoCliente_Id FOREIGN KEY(cliente_id) REFERENCES cliente(id),
 	CONSTRAINT FK_TipoTelefono_TelefonoCliente_Id FOREIGN KEY(tipo_id) REFERENCES tipo_telefono(id)
