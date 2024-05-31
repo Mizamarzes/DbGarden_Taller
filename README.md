@@ -65,6 +65,8 @@
   	email
   FROM empleado
   WHERE jefe_id = 7;
+  
+  Empty set (0.00 sec)
   ```
 
 4. Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la
@@ -80,17 +82,317 @@
      FROM empleado AS e
      JOIN puesto AS p ON e.puesto_id = p.id
      WHERE jefe_id IS NULL;
-     
      +-----------------+--------+-----------+-----------+------------------+
      | puesto          | nombre | apellido1 | apellido2 | email            |
      +-----------------+--------+-----------+-----------+------------------+
      | Gerente General | Juan   | García    | Pérez     | juan@example.com |
      +-----------------+--------+-----------+-----------+------------------+
-     
      ```
 
 5. Devuelve un listado con el nombre, apellidos y puesto de aquellos
      empleados que no sean representantes de ventas.
+
+     ```mysql
+     SELECT	
+     	e.nombre,
+     	e.apellido1,
+     	e.apellido2,
+     	p.puesto AS puesto
+     FROM empleado AS e
+     JOIN puesto AS p ON e.puesto_id = p.id
+     WHERE p.puesto != 'Representante de Ventas';
+     +--------+-----------+-----------+-----------------------------+
+     | nombre | apellido1 | apellido2 | puesto                      |
+     +--------+-----------+-----------+-----------------------------+
+     | Juan   | García    | Pérez     | Gerente General             |
+     | María  | López     | Sánchez   | Gerente de Ventas           |
+     | Carlos | Martínez  | Gómez     | Gerente de Marketing        |
+     | Laura  | Rodríguez | Díaz      | Gerente de Finanzas         |
+     | Pedro  | Hernández | Fernández | Gerente de Recursos Humanos |
+     | Ana    | González  | Vázquez   | Jefe de Operaciones         |
+     | Diego  | Sánchez   | López     | Jefe de Logística           |
+     | Sofía  | Pérez     | Martínez  | Jefe de Compras             |
+     | Luis   | Fernández | González  | Asistente Administrativo    |
+     | Elena  | Vázquez   | Sánchez   | Asistente de Ventas         |
+     +--------+-----------+-----------+-----------------------------+
+     ```
+
+6. Devuelve un listado con el nombre de los todos los clientes españoles.
+
+     ```mysql
+     SELECT
+     	c.nombre AS cliente,
+     	p.nombre AS pais 
+     FROM cliente AS c
+     JOIN direccion_cliente AS dc ON dc.cliente_id = c.id
+     JOIN pais AS p ON p.id = dc.pais_id
+     WHERE p.nombre = 'España';
+     +-----------------+--------+
+     | cliente         | pais   |
+     +-----------------+--------+
+     | El Carajo Ltda. | España |
+     | Walmart         | España |
+     +-----------------+--------+
+     ```
+
+7. Devuelve un listado con los distintos estados por los que puede pasar un
+     pedido.
+
+     ```mysql
+     SELECT DISTINCT
+     	id,
+     	estado
+     FROM estado_pedido;
+     +----+------------------+
+     | id | estado           |
+     +----+------------------+
+     |  1 | Pendiente        |
+     |  2 | Procesando       |
+     |  3 | Enviado          |
+     |  4 | Entregado        |
+     |  5 | Cancelado        |
+     |  6 | Devuelto         |
+     |  7 | En espera        |
+     |  8 | Preparando envío |
+     |  9 | En tránsito      |
+     | 10 | Completado       |
+     +----+------------------+
+     ```
+
+     
+
+8. Devuelve un listado con el código de cliente de aquellos clientes que
+     realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar
+       aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
+
+  - Utilizando la función YEAR de MySQL.
+
+    ```mysql
+    SELECT 
+    	id AS cliente_id,
+    	fecha_pago
+    FROM pago
+    WHERE YEAR(fecha_pago) = '2008';
+    +------------+------------+
+    | cliente_id | fecha_pago |
+    +------------+------------+
+    |         12 | 2008-04-25 |
+    +------------+------------+
+    ```
+
+  - Utilizando la función DATE_FORMAT de MySQL.
+
+    ```mysql
+    SELECT 
+    	id AS cliente_id,
+    	fecha_pago
+    FROM pago
+    WHERE DATE_FORMAT(fecha_pago, '%Y') = '2008';
+    +------------+------------+
+    | cliente_id | fecha_pago |
+    +------------+------------+
+    |         12 | 2008-04-25 |
+    +------------+------------+
+    ```
+
+  - Sin utilizar ninguna de las funciones anteriores.
+
+    ```mysql
+    SELECT 
+    	id AS cliente_id,
+    	fecha_pago
+    FROM pago
+    WHERE fecha_pago BETWEEN '2008-01-01' AND '2008-12-31';
+    +------------+------------+
+    | cliente_id | fecha_pago |
+    +------------+------------+
+    |         12 | 2008-04-25 |
+    +------------+------------+
+    ```
+
+9. Devuelve un listado con el código de pedido, código de cliente, fecha
+    esperada y fecha de entrega de los pedidos que no han sido entregados a
+    tiempo.
+
+    ```mysql
+    SELECT
+    	id AS codigo_pedido,
+    	id AS codigo_cliente,
+    	fecha_esperada,
+    	fecha_entrega
+    FROM pedido
+    WHERE fecha_entrega>fecha_esperada;
+    +---------------+----------------+----------------+---------------+
+    | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+    +---------------+----------------+----------------+---------------+
+    |            11 |             11 | 2015-04-28     | 2016-04-30    |
+    +---------------+----------------+----------------+---------------+
+    ```
+
+10. Devuelve un listado con el código de pedido, código de cliente, fecha
+    esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al
+    menos dos días antes de la fecha esperada.
+
+    - Utilizando la función ADDDATE de MySQL.
+
+      ```mysql
+      SELECT
+      	id AS codigo_pedido,
+      	id AS codigo_cliente,
+      	fecha_esperada,
+      	fecha_entrega
+      FROM pedido
+      WHERE ADDDATE(fecha_esperada, INTERVAL -2 DAY) >= fecha_entrega;
+      +---------------+----------------+----------------+---------------+
+      | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+      +---------------+----------------+----------------+---------------+
+      |            12 |             12 | 2020-05-28     | 2020-05-25    |
+      +---------------+----------------+----------------+---------------+
+      ```
+
+    - Utilizando la función DATEDIFF de MySQL.
+
+      ```mysql
+      SELECT
+      	id AS codigo_pedido,
+      	id AS codigo_cliente,
+      	fecha_esperada,
+      	fecha_entrega
+      FROM pedido
+      WHERE DATEDIFF(fecha_esperada, fecha_entrega) >= 2;
+      +---------------+----------------+----------------+---------------+
+      | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+      +---------------+----------------+----------------+---------------+
+      |            12 |             12 | 2020-05-28     | 2020-05-25    |
+      +---------------+----------------+----------------+---------------+
+      ```
+
+    - ¿Sería posible resolver esta consulta utilizando el operador de suma + o
+      resta -?
+
+      ```mysql
+      SELECT
+      	id AS codigo_pedido,
+      	id AS codigo_cliente,
+      	fecha_esperada,
+      	fecha_entrega
+      FROM pedido
+      WHERE fecha_entrega <= (fecha_esperada - INTERVAL 2 DAY);
+      +---------------+----------------+----------------+---------------+
+      | codigo_pedido | codigo_cliente | fecha_esperada | fecha_entrega |
+      +---------------+----------------+----------------+---------------+
+      |            12 |             12 | 2020-05-28     | 2020-05-25    |
+      +---------------+----------------+----------------+---------------+
+      ```
+
+11. Devuelve un listado de todos los pedidos que fueron rechazados en 2009.
+
+     ```mysql
+     SELECT
+     	p.id,
+     	p.comentarios AS pedido,
+     	p.fecha_pedido,
+     	ep.estado AS estado_pedido
+     FROM pedido AS p
+     JOIN estado_pedido AS ep ON p.estado_pedido_id = ep.id
+     WHERE YEAR(fecha_pedido) = '2009' AND ep.estado = 'Rechazado';
+     +----+-----------+--------------+---------------+
+     | id | pedido    | fecha_pedido | estado_pedido |
+     +----+-----------+--------------+---------------+
+     | 14 | Guanabana | 2009-05-01   | Rechazado     |
+     +----+-----------+--------------+---------------+
+     ```
+
+12. Devuelve un listado de todos los pedidos que han sido entregados en el
+     mes de enero de cualquier año.
+
+     ```mysql
+     SELECT
+     	p.id,
+     	p.comentarios AS pedido,
+     	p.fecha_entrega,
+     	ep.estado AS estado_pedido
+     FROM pedido AS p
+     JOIN estado_pedido AS ep ON p.estado_pedido_id = ep.id
+     WHERE DATE_FORMAT(fecha_entrega, '%M') = 'January' AND ep.estado = 'Entregado';
+     +----+-----------------+---------------+---------------+
+     | id | pedido          | fecha_entrega | estado_pedido |
+     +----+-----------------+---------------+---------------+
+     | 16 | Papa con Flores | 2010-01-16    | Entregado     |
+     +----+-----------------+---------------+---------------+
+     ```
+
+13. Devuelve un listado con todos los pagos que se realizaron en el
+     año 2008 mediante Paypal. Ordene el resultado de mayor a menor.
+
+     ```mysql
+     SELECT
+     	p.id,
+     	p.fecha_pago,
+     	fp.forma AS forma_pago
+     FROM pago AS p
+     JOIN forma_pago AS fp ON p.forma_pago_id = fp.id
+     WHERE YEAR(p.fecha_pago) = '2008' AND fp.forma = 'Paypal';
+     +----+------------+------------+
+     | id | fecha_pago | forma_pago |
+     +----+------------+------------+
+     | 16 | 2008-01-11 | PayPal     |
+     +----+------------+------------+
+     ```
+
+14. Devuelve un listado con todas las formas de pago que aparecen en la
+     tabla pago. Tenga en cuenta que no deben aparecer formas de pago
+     repetidas.
+
+     ```mysql
+     SELECT DISTINCT
+     	fp.forma AS forma_pago
+     FROM forma_pago AS fp
+     JOIN pago AS p ON p.forma_pago_id = fp.id;
+     +------------------------+
+     | forma_pago             |
+     +------------------------+
+     | Efectivo               |
+     | Tarjeta de crédito     |
+     | Tarjeta de débito      |
+     | Transferencia bancaria |
+     | Cheque                 |
+     | PayPal                 |
+     | Bitcoin                |
+     | Criptomoneda           |
+     | Apple Pay              |
+     | Google Pay             |
+     +------------------------+
+     ```
+
+15. Devuelve un listado con todos los productos que pertenecen a la
+     gama Ornamentales y que tienen más de 100 unidades en stock. El listado
+     deberá estar ordenado por su precio de venta, mostrando en primer lugar
+     los de mayor precio.
+
+     ```mysql
+     SELECT 
+     	p.id,
+     	p.nombre,
+     	gp.descripcion_texto AS gama,
+     	pe.precio_venta AS precio,
+     	p.cantidad_en_stock	 AS cantidad_en_stock
+     FROM producto AS p
+     JOIN gama_producto AS gp ON p.gama_id = gp.id
+     JOIN precio AS pe ON pe.producto_id = p.id 
+     WHERE p.cantidad_en_stock > 100 
+     	AND gp.descripcion_texto = 'Ornamentales'
+     ORDER BY pe.precio_venta DESC;
+     +----+--------+--------------+--------+-------------------+
+     | id | nombre | gama         | precio | cantidad_en_stock |
+     +----+--------+--------------+--------+-------------------+
+     | 14 | Liana  | Ornamentales | 399.99 |               220 |
+     | 13 | Maraca | Ornamentales |  35.99 |               170 |
+     +----+--------+--------------+--------+-------------------+
+     ```
+
+16. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y
+     cuyo representante de ventas tenga el código de empleado 11 o 30.
 
      ```mysql
      
@@ -98,272 +400,130 @@
 
      
 
-6. Devuelve un listado con el nombre de los todos los clientes españoles.
+     ## Consultas multitabla (Composición interna)
 
-7. Devuelve un listado con los distintos estados por los que puede pasar un
-     pedido.
+     ### Resuelva todas las consultas utilizando la sintaxis de SQL1 y SQL2. Las consultas con sintaxis de SQL2 se deben resolver con INNER JOIN y NATURAL JOIN.
 
-8. Devuelve un listado con el código de cliente de aquellos clientes que
-     realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar
-       aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
+     1. Obtén un listado con el nombre de cada cliente y el nombre y apellido de su  representante de ventas.  
 
-  
+     2. Muestra el nombre de los clientes que hayan realizado pagos junto con el  nombre de sus representantes de ventas. 
 
-  - Utilizando la función YEAR de MySQL.
+     3. Muestra el nombre de los clientes que no hayan realizado pagos junto con  el nombre de sus representantes de ventas. 
 
-  - Utilizando la función DATE_FORMAT de MySQL.
+     4. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus  representantes junto con la ciudad de la oficina a la que pertenece el  representante. 
 
-  - Sin utilizar ninguna de las funciones anteriores.
+     5. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre  de sus representantes junto con la ciudad de la oficina a la que pertenece el  representante. 
 
-    
+     6. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.  
 
-9. Devuelve un listado con el código de pedido, código de cliente, fecha
-    esperada y fecha de entrega de los pedidos que no han sido entregados a
-    tiempo.
+     7. Devuelve el nombre de los clientes y el nombre de sus representantes junto  con la ciudad de la oficina a la que pertenece el representante. 
 
-10. Devuelve un listado con el código de pedido, código de cliente, fecha
-    esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al
-    menos dos días antes de la fecha esperada.
-    •
-    •
-    •
-    Utilizando la función ADDDATE de MySQL.
-    Utilizando la función DATEDIFF de MySQL.
-    ¿Sería posible resolver esta consulta utilizando el operador de suma + o
-    resta -?
+     8. Devuelve un listado con el nombre de los empleados junto con el nombre  de sus jefes.
 
-11. Devuelve un listado de todos los pedidos que fueron rechazados en 2009.12. Devuelve un listado de todos los pedidos que han sido entregados en el
-    mes de enero de cualquier año.
+     9. Devuelve un listado que muestre el nombre de cada empleados, el nombre  de su jefe y el nombre del jefe de sus jefe.  
 
-12. Devuelve un listado con todos los pagos que se realizaron en el
-    año 2008 mediante Paypal. Ordene el resultado de mayor a menor.
+     10. Devuelve el nombre de los clientes a los que no se les ha entregado a  tiempo un pedido.  
 
-13. Devuelve un listado con todas las formas de pago que aparecen en la
-    tabla pago. Tenga en cuenta que no deben aparecer formas de pago
-    repetidas.
+     11. Devuelve un listado de las diferentes gamas de producto que ha comprado  cada cliente.
 
-14. Devuelve un listado con todos los productos que pertenecen a la
-    gama Ornamentales y que tienen más de 100 unidades en stock. El listado
-    deberá estar ordenado por su precio de venta, mostrando en primer lugar
-    los de mayor precio.
+         
 
-15. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y
-    cuyo representante de ventas tenga el código de empleado 11 o 30.
-    Consultas multitabla (Composición interna)
-    Resuelva todas las consultas utilizando la sintaxis de SQL1 y SQL2. Las consultas con
-    sintaxis de SQL2 se deben resolver con INNER JOIN y NATURAL JOIN.
+     ## Consultas multitabla (Composición externa)
 
-16. Obtén un listado con el nombre de cada cliente y el nombre y apellido de su
-      representante de ventas.
+     ### Resuelva todas las consultas utilizando las cláusulas LEFT JOIN, RIGHT JOIN, NATURALLEFT JOIN y NATURAL RIGHT JOIN.
 
-17. Muestra el nombre de los clientes que hayan realizado pagos junto con el
-      nombre de sus representantes de ventas.
+     1. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pago. 
+     2. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pedido.
+     3. Devuelve un listado que muestre los clientes que no han realizado ningún  pago y los que no han realizado ningún pedido.
+     4. Devuelve un listado que muestre solamente los empleados que no tienen  una oficina asociada.
+     5. Devuelve un listado que muestre solamente los empleados que no tienen un  cliente asociado.
+     6. Devuelve un listado que muestre solamente los empleados que no tienen un  cliente asociado junto con los datos de la oficina donde trabajan.
+     7. Devuelve un listado que muestre los empleados que no tienen una oficina  asociada y los que no tienen un cliente asociado.  
+     8. Devuelve un listado de los productos que nunca han aparecido en un  pedido.
+     9. Devuelve un listado de los productos que nunca han aparecido en un  pedido. El resultado debe mostrar el nombre, la descripción y la imagen del  producto. 
+     10. Devuelve las oficinas donde no trabajan ninguno de los empleados que  hayan sido los representantes de ventas de algún cliente que haya realizado  la compra de algún producto de la gama Frutales. 
+     11. Devuelve un listado con los clientes que han realizado algún pedido pero no  han realizado ningún pago.
+     12. Devuelve un listado con los datos de los empleados que no tienen clientes  asociados y el nombre de su jefe asociado.
 
-18. Muestra el nombre de los clientes que no hayan realizado pagos junto con
-      el nombre de sus representantes de ventas.
+     
 
-19. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus
-      representantes junto con la ciudad de la oficina a la que pertenece el
-      representante.
+     ## Consultas resumen
 
-20. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre
-      de sus representantes junto con la ciudad de la oficina a la que pertenece el
-      representante.
+     1. ¿Cuántos empleados hay en la compañía?
+     2. ¿Cuántos clientes tiene cada país?
+     3. ¿Cuál fue el pago medio en 2009?
+     4. ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma  descendente por el número de pedidos.
+     5. Calcula el precio de venta del producto más caro y más barato en una  misma consulta.
+     6. Calcula el número de clientes que tiene la empresa. 
+     7. ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?  
+     8. ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan  por M?
+     9. Devuelve el nombre de los representantes de ventas y el número de clientes  al que atiende cada uno. 
+     10. Calcula el número de clientes que no tiene asignado representante de  ventas. 
+     11. Calcula la fecha del primer y último pago realizado por cada uno de los  clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.  
+     12. Calcula el número de productos diferentes que hay en cada uno de los  pedidos.  
+     13. Calcula la suma de la cantidad total de todos los productos que aparecen en  cada uno de los pedidos. 
+     14. Devuelve un listado de los 20 productos más vendidos y el número total de  unidades que se han vendido de cada uno. El listado deberá estar ordenado  por el número total de unidades vendidas. 
+     15. La facturación que ha tenido la empresa en toda la historia, indicando la  base imponible, el IVA y el total facturado. La base imponible se calcula  sumando el coste del producto por el número de unidades vendidas de la  tabla detalle_pedido. El IVA es el 21 % de la base imponible, y el total la  suma de los dos campos anteriores.
+     16. La misma información que en la pregunta anterior, pero agrupada por  código de producto. 
+     17. La misma información que en la pregunta anterior, pero agrupada por  código de producto filtrada por los códigos que empiecen por OR.
+     18. Lista las ventas totales de los productos que hayan facturado más de 3000  euros. Se mostrará el nombre, unidades vendidas, total facturado y total  facturado con impuestos (21% IVA). 
+     19. Muestre la suma total de todos los pagos que se realizaron para cada uno  de los años que aparecen en la tabla pagos.
 
-21. Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
+     
 
-22. Devuelve el nombre de los clientes y el nombre de sus representantes junto
-      con la ciudad de la oficina a la que pertenece el representante.8. Devuelve un listado con el nombre de los empleados junto con el nombre
-      de sus jefes.
+     ## Subconsultas
 
-23. Devuelve un listado que muestre el nombre de cada empleados, el nombre
-      de su jefe y el nombre del jefe de sus jefe.
+     ### Con operadores básicos de comparación
 
-24. Devuelve el nombre de los clientes a los que no se les ha entregado a
-    tiempo un pedido.
+     1. Devuelve el nombre del cliente con mayor límite de crédito.
+     2. Devuelve el nombre del producto que tenga el precio de venta más caro.
+     3. Devuelve el nombre del producto del que se han vendido más unidades.  (Tenga en cuenta que tendrá que calcular cuál es el número total de  unidades que se han vendido de cada producto a partir de los datos de la  tabla detalle_pedido)
+     4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya  realizado. (Sin utilizar INNER JOIN).
+     5. Devuelve el producto que más unidades tiene en stock. 
+     6. Devuelve el producto que menos unidades tiene en stock.
+     7. Devuelve el nombre, los apellidos y el email de los empleados que están a  cargo de Alberto Soria.
 
-25. Devuelve un listado de las diferentes gamas de producto que ha comprado
-    cada cliente.
-    Consultas multitabla (Composición externa)
-    Resuelva todas las consultas utilizando las cláusulas LEFT JOIN, RIGHT JOIN, NATURAL
-    LEFT JOIN y NATURAL RIGHT JOIN.
+     
 
-26. Devuelve un listado que muestre solamente los clientes que no han
-      realizado ningún pago.
+     ###   Subconsultas con ALL y ANY
 
-27. Devuelve un listado que muestre solamente los clientes que no han
-      realizado ningún pedido.
+     8. Devuelve el nombre del cliente con mayor límite de crédito. 
 
-28. Devuelve un listado que muestre los clientes que no han realizado ningún
-      pago y los que no han realizado ningún pedido.
+     9. Devuelve el nombre del producto que tenga el precio de venta más caro.
 
-29. Devuelve un listado que muestre solamente los empleados que no tienen
-      una oficina asociada.
+     10. Devuelve el producto que menos unidades tiene en stock. 
 
-30. Devuelve un listado que muestre solamente los empleados que no tienen un
-      cliente asociado.
+         
 
-31. Devuelve un listado que muestre solamente los empleados que no tienen un
-      cliente asociado junto con los datos de la oficina donde trabajan.
+     ### Subconsultas con IN y NOT IN
 
-32. Devuelve un listado que muestre los empleados que no tienen una oficina
-      asociada y los que no tienen un cliente asociado.
+     11. Devuelve el nombre, apellido1 y cargo de los empleados que no  representen a ningún cliente. 
+     12. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pago. 
+     13. Devuelve un listado que muestre solamente los clientes que sí han realizado  algún pago. 
+     14. Devuelve un listado de los productos que nunca han aparecido en un  pedido.  
+     15. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos  empleados que no sean representante de ventas de ningún cliente.
+     16. Devuelve las oficinas donde no trabajan ninguno de los empleados que  hayan sido los representantes de ventas de algún cliente que haya realizado  la compra de algún producto de la gama Frutales. 
+     17. Devuelve un listado con los clientes que han realizado algún pedido pero no  han realizado ningún pago.
 
-33. Devuelve un listado de los productos que nunca han aparecido en un
-      pedido.9. Devuelve un listado de los productos que nunca han aparecido en un
-      pedido. El resultado debe mostrar el nombre, la descripción y la imagen del
-      producto.
+     
 
-34. Devuelve las oficinas donde no trabajan ninguno de los empleados que
-    hayan sido los representantes de ventas de algún cliente que haya realizado
-    la compra de algún producto de la gama Frutales.
+     ### Subconsultas con EXISTS y NOT EXISTS
 
-35. Devuelve un listado con los clientes que han realizado algún pedido pero no
-    han realizado ningún pago.
+     18. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pago. 
+     19. Devuelve un listado que muestre solamente los clientes que sí han realizado  algún pago.
+     20. Devuelve un listado de los productos que nunca han aparecido en un  pedido. 
+     21. Devuelve un listado de los productos que han aparecido en un pedido alguna vez.
 
-36. Devuelve un listado con los datos de los empleados que no tienen clientes
-    asociados y el nombre de su jefe asociado.
-    Consultas resumen
+     
 
-37. ¿Cuántos empleados hay en la compañía?
+     ### Subconsultas correlacionadas
 
-38. ¿Cuántos clientes tiene cada país?
+     ## Consultas variadas
 
-39. ¿Cuál fue el pago medio en 2009?
-
-40. ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma
-      descendente por el número de pedidos.
-
-41. Calcula el precio de venta del producto más caro y más barato en una
-      misma consulta.
-
-42. Calcula el número de clientes que tiene la empresa.
-
-43. ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
-
-44. ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan
-      por M?
-
-45. Devuelve el nombre de los representantes de ventas y el número de clientes
-      al que atiende cada uno.
-
-46. Calcula el número de clientes que no tiene asignado representante de
-    ventas.
-
-47. Calcula la fecha del primer y último pago realizado por cada uno de los
-    clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.12. Calcula el número de productos diferentes que hay en cada uno de los
-    pedidos.
-
-48. Calcula la suma de la cantidad total de todos los productos que aparecen en
-    cada uno de los pedidos.
-
-49. Devuelve un listado de los 20 productos más vendidos y el número total de
-    unidades que se han vendido de cada uno. El listado deberá estar ordenado
-    por el número total de unidades vendidas.
-
-50. La facturación que ha tenido la empresa en toda la historia, indicando la
-    base imponible, el IVA y el total facturado. La base imponible se calcula
-    sumando el coste del producto por el número de unidades vendidas de la
-    tabla detalle_pedido. El IVA es el 21 % de la base imponible, y el total la
-    suma de los dos campos anteriores.
-
-51. La misma información que en la pregunta anterior, pero agrupada por
-    código de producto.
-
-52. La misma información que en la pregunta anterior, pero agrupada por
-    código de producto filtrada por los códigos que empiecen por OR.
-
-53. Lista las ventas totales de los productos que hayan facturado más de 3000
-    euros. Se mostrará el nombre, unidades vendidas, total facturado y total
-    facturado con impuestos (21% IVA).
-
-54. Muestre la suma total de todos los pagos que se realizaron para cada uno
-    de los años que aparecen en la tabla pagos.
-    Subconsultas
-    Con operadores básicos de comparación
-
-55. Devuelve el nombre del cliente con mayor límite de crédito.
-
-56. Devuelve el nombre del producto que tenga el precio de venta más caro.
-
-57. Devuelve el nombre del producto del que se han vendido más unidades.
-      (Tenga en cuenta que tendrá que calcular cuál es el número total de
-      unidades que se han vendido de cada producto a partir de los datos de la
-      tabla detalle_pedido)4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya
-      realizado. (Sin utilizar INNER JOIN).
-
-58. Devuelve el producto que más unidades tiene en stock.
-
-59. Devuelve el producto que menos unidades tiene en stock.
-
-60. Devuelve el nombre, los apellidos y el email de los empleados que están a
-      cargo de Alberto Soria.
-      Subconsultas con ALL y ANY
-
-61. Devuelve el nombre del cliente con mayor límite de crédito.
-
-62. Devuelve el nombre del producto que tenga el precio de venta más caro.
-
-63. Devuelve el producto que menos unidades tiene en stock.
-    Subconsultas con IN y NOT IN
-
-64. Devuelve el nombre, apellido1 y cargo de los empleados que no
-    representen a ningún cliente.
-
-65. Devuelve un listado que muestre solamente los clientes que no han
-    realizado ningún pago.
-
-66. Devuelve un listado que muestre solamente los clientes que sí han realizado
-    algún pago.
-
-67. Devuelve un listado de los productos que nunca han aparecido en un
-    pedido.
-
-68. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos
-    empleados que no sean representante de ventas de ningún cliente.
-
-69. Devuelve las oficinas donde no trabajan ninguno de los empleados que
-    hayan sido los representantes de ventas de algún cliente que haya realizado
-    la compra de algún producto de la gama Frutales.
-
-70. Devuelve un listado con los clientes que han realizado algún pedido pero no
-    han realizado ningún pago.
-    18.Subconsultas con EXISTS y NOT EXISTS
-
-71. Devuelve un listado que muestre solamente los clientes que no han
-    realizado ningún pago.
-
-72. Devuelve un listado que muestre solamente los clientes que sí han realizado
-    algún pago.
-
-73. Devuelve un listado de los productos que nunca han aparecido en un
-    pedido.
-
-74. Devuelve un listado de los productos que han aparecido en un pedido
-    alguna vez.
-    Subconsultas correlacionadas
-    Consultas variadas
-
-75. Devuelve el listado de clientes indicando el nombre del cliente y cuántos
-      pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no
-      han realizado ningún pedido.
-
-76. Devuelve un listado con los nombres de los clientes y el total pagado por
-      cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han
-      realizado ningún pago.
-
-77. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008
-      ordenados alfabéticamente de menor a mayor.
-
-78. Devuelve el nombre del cliente, el nombre y primer apellido de su
-      representante de ventas y el número de teléfono de la oficina del
-      representante de ventas, de aquellos clientes que no hayan realizado ningún
-      pago.
-
-79. Devuelve el listado de clientes donde aparezca el nombre del cliente, el
-      nombre y primer apellido de su representante de ventas y la ciudad donde
-      está su oficina.
-
-80. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos
-      empleados que no sean representante de ventas de ningún cliente.7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el
-      número de empleados que tiene.
+     1. Devuelve el listado de clientes indicando el nombre del cliente y cuántos  pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no  han realizado ningún pedido. 
+     2. Devuelve un listado con los nombres de los clientes y el total pagado por  cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han  realizado ningún pago. 
+     3. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008  ordenados alfabéticamente de menor a mayor. 
+     4. Devuelve el nombre del cliente, el nombre y primer apellido de su  representante de ventas y el número de teléfono de la oficina del  representante de ventas, de aquellos clientes que no hayan realizado ningún  pago.
+     5. Devuelve el listado de clientes donde aparezca el nombre del cliente, el  nombre y primer apellido de su representante de ventas y la ciudad donde  está su oficina. 
+     6. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos  empleados que no sean representante de ventas de ningún cliente.
+     7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el  número de empleados que tiene. 
