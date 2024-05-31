@@ -626,3 +626,9 @@ INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_sto
 INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) VALUES 
     (13, 35.99, 4, 20.50),
     (14, 399.99, 4, 235.50);
+
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
+    ('Riot Games', 5, 11, 10000.00);
+
+INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detalle) VALUES 
+    (13, 11, 13, 13, 'Calle Mayorca #333');

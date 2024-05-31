@@ -470,6 +470,11 @@ INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) V
     (14, 399.99, 4, 235.50);
 
 -- 16.
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
+    ('Riot Games', 5, 11, 10000.00);
+
+INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detalle) VALUES 
+    (13, 11, 13, 13, 'Calle Mayorca #333');
 
 -- ################ INSERCIONES PARA CONSULTAS MULTITABLA ###############
 -- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf

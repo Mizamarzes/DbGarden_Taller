@@ -395,7 +395,14 @@
      cuyo representante de ventas tenga el código de empleado 11 o 30.
 
      ```mysql
-     
+     SELECT
+     	c.nombre AS cliente,
+     	cc.nombre AS ciudad,
+     	c.empleado_id AS codigo_empleado
+     FROM ciudad AS cc
+     JOIN direccion_cliente AS dc ON dc.id = c.id
+     JOIN ciudad AS cc ON dc.ciudad_id = cc.id
+     WHERE cc.nombre = 'Madrid' AND c.empleado_id = 11 OR 30;
      ```
 
      
