@@ -490,6 +490,21 @@ INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detall
 -- 5.
 
 -- 6.
+INSERT INTO ciudad (nombre, codigo_postal) VALUES ('Fuenlabrada', '28940');
+
+INSERT INTO oficina (nombre) VALUES ('Oficina Fuenlabrada');
+
+INSERT INTO direccion_oficina (oficina_id, pais_id, region_id, ciudad_id, detalle)
+VALUES (15, 11, 11, 15, 'Calle Fuenlambrada, 4');
+
+INSERT INTO empleado (nombre, apellido1, apellido2, extension, email, oficina_id, puesto_id)
+VALUES ('Daniel', 'Navas', 'Gomez', '9904', 'Daniel_navas@example.com', 15, 5);
+
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito)
+VALUES ('Cliente Fuenlabrada', 7, 12, 6720.00);
+
+INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detalle)
+VALUES (14, 11, 11, 15, 'Avenida de la Muerte, 65');
 
 -- 7.
 

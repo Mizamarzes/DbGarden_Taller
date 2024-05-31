@@ -160,27 +160,113 @@ FROM forma_pago AS fp
 JOIN pago AS p ON p.forma_pago_id = fp.id;
 
 -- 15.
+SELECT 
+     p.id,
+     p.nombre,
+     gp.descripcion_texto AS gama,
+     pe.precio_venta AS precio,
+     p.cantidad_en_stock  AS cantidad_en_stock
+FROM producto AS p
+JOIN gama_producto AS gp ON p.gama_id = gp.id
+JOIN precio AS pe ON pe.producto_id = p.id 
+WHERE p.cantidad_en_stock > 100 
+     AND gp.descripcion_texto = 'Ornamentales'
+ORDER BY pe.precio_venta DESC;
 
 -- 16.
+SELECT
+     c.nombre AS cliente,
+     cc.nombre AS ciudad,
+     c.empleado_id AS codigo_empleado
+FROM ciudad AS cc
+JOIN direccion_cliente AS dc ON dc.ciudad_id = cc.id
+JOIN cliente AS c ON c.id = dc.id
+WHERE cc.nombre = 'Madrid' AND c.empleado_id = 11 OR c.empleado_id = 30;
 
 -- ################ CONSULTAS MULTITABLA(Composicion Interna) ###############
 -- Esta enumeracion de consultas esta basado en DbGarden.pdf
 
 -- 1.
+SELECT
+	c.nombre AS cliente,
+	e.nombre AS representante_ventas,
+	e.apellido1 AS apellido
+FROM cliente AS c
+JOIN empleado AS e ON c.empleado_id = e.id;
 
 -- 2.
+SELECT
+	c.nombre AS cliente,
+	e.nombre AS representante_ventas
+FROM pago AS p
+JOIN cliente AS c ON p.cliente_id = c.id
+JOIN empleado AS e ON e.id = c.empleado_id;
 
 -- 3.
+SELECT
+    c.nombre AS cliente,
+    e.nombre AS representante_ventas
+FROM cliente AS c
+JOIN empleado AS e ON c.empleado_id = e.id
+WHERE c.id NOT IN (
+    SELECT DISTINCT p.cliente_id
+    FROM pago AS p
+);
 
 -- 4.
+SELECT DISTINCT
+	c.nombre AS cliente,
+	e.nombre AS representante_ventas,
+	o.nombre AS oficina
+FROM cliente AS c
+JOIN empleado AS e ON e.id = c.empleado_id
+JOIN oficina AS o ON e.oficina_id = o.id
+JOIN pago AS p ON p.cliente_id = c.id; 
 
 -- 5.
+SELECT
+    c.nombre AS cliente,
+    e.nombre AS representante_ventas,
+    cc.nombre AS ciudad_oficina
+FROM cliente AS c
+JOIN empleado AS e ON c.empleado_id = e.id
+JOIN oficina AS o ON e.oficina_id = o.id
+JOIN direccion_oficina AS do ON do.oficina_id = o.id
+JOIN ciudad AS cc ON do.ciudad_id = cc.id
+WHERE c.id NOT IN (
+    SELECT DISTINCT p.cliente_id
+    FROM pago AS p
+);
 
 -- 6.
+SELECT
+	o.nombre AS nombre_oficina,
+	cc.nombre AS Ciudad
+FROM ciudad AS cc
+JOIN direccion_oficina AS do ON cc.id = do.ciudad_id
+JOIN oficina AS o ON o.id = do.oficina_id
+JOIN empleado AS e ON e.oficina_id = o.id
+WHERE cc.nombre = 'FuenLabrada';
 
 -- 7.
+SELECT
+	c.nombre AS cliente,
+	e.nombre AS nombre_representante,
+	cc.nombre AS ciudad_oficina
+FROM cliente AS c
+JOIN empleado AS e ON e.id = c.empleado_id
+JOIN oficina AS o ON o.id = e.oficina_id
+JOIN direccion_oficina AS do ON do.oficina_id = o.id
+JOIN ciudad AS cc ON cc.id = do.ciudad_id;
 
 -- 8.
+SELECT 
+    e1.nombre AS empleado_nombre,
+    e2.nombre AS jefe_nombre
+FROM 
+    empleado e1
+LEFT JOIN 
+    empleado e2 ON e1.jefe_id = e2.id;
 
 -- 9.
 
