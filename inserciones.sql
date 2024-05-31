@@ -336,6 +336,9 @@ INSERT INTO detalle_pedido (producto_id, pedido_id, cantidad, numero_linea) VALU
 -- Estas inserciones se realizaron a base de cumplir las necesidades de las consultas
 -- Se realizara por numero de consulta mientras sea necesario
 
+-- ################ INSERCIONES PARA CONSULTAS SOBRE UNA TABLA ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
+
 -- 1.
 
 -- 2. 
@@ -384,6 +387,154 @@ INSERT INTO telefono_oficina (oficina_id, tipo_id, numero) VALUES
 -- 4.
 
 -- 5.
+INSERT INTO puesto(puesto) VALUES
+('Representante de Ventas');
+
+INSERT INTO empleado(nombre, apellido1, apellido2, extension, email, oficina_id, jefe_id, puesto_id)
+VALUES ('Juan', 'Contreras', 'Melendez', '1278', 'mizamarzes@gmail.com', 12, 1, 11);
+
+-- 6.
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
+('El Carajo Ltda.', 5, 11, 6000.00),
+('Walmart', 10,11,10000.00);
+
+INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detalle) VALUES 
+    (11, 11, 13, 13, 'Calle Secundaria #333'),
+	(12, 11, 12, 14, 'Calle Loco#623');
+
+-- 7.
+
+-- 8.
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (11, 8, 1, '2024-10-11', 150.00),
+    (12, 7,1,'2008-04-25', 500.00 );
+
+-- 9.
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2015-04-21', '2015-04-28', '2016-04-30', 4, 11, 12, 'Masapan');
+
+-- 10.
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (5, 1, 1, '2020-04-21', 850.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2020-05-20', '2020-05-28', '2020-05-25', 4, 5, 13, 'Aguapanela');
+
+-- 11.
+INSERT INTO estado_pedido (estado) VALUES 
+    ('Rechazado');
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2009-05-01', '2009-05-01', '2009-05-01', 11, 5, NULL, 'Guanabana');
+
+-- 12.
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (7, 4, 2, '2010-01-11', 2450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2010-01-11', '2010-02-01', '2010-02-03', 4, 7, 14, 'Yuca');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (7, 4, 2, '2010-01-11', 3450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2010-01-11', '2010-01-14', '2010-01-16', 4, 7, 15, 'Papa con Flores');
+
+-- 13.
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (11, 6, 4, '2008-01-11', 3450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2008-01-11', '2008-01-14', '2008-01-16', 4, 1, 16, 'Fertilizante la juanita');
+
+-- 14.
+
+-- 15.
+INSERT INTO gama_producto (descripcion_texto, descripcion_html, imagen) VALUES 
+    ('Ornamentales', '<p>decoracion.</p>', 'ornamental_accesorios.jpg');
+
+INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_stock) VALUES 
+    ('Cesped Tapizante', 1, '50x50x50 cm', 'Cesped GOD', 150),  
+    ('Trepadora', 2, '45x35x10 cm', 'LA TREPADORA', 120);
+
+INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) VALUES 
+    (11, 25.99, 7, 14.50),
+    (12, 35.99, 7, 25.50);
+
+INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_stock) VALUES 
+    ('Maraca', 11, '20x20x20 cm', 'Wakanda', 170),  
+    ('Liana', 11, '45x15x10 cm', 'League of legends', 220);
+
+INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) VALUES 
+    (13, 35.99, 4, 20.50),
+    (14, 399.99, 4, 235.50);
+
+-- 16.
+
+-- ################ INSERCIONES PARA CONSULTAS MULTITABLA ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
+
+-- 1.
+
+-- 2.
+
+-- 3.
+
+-- 4.
+
+-- 5.
+
+-- 6.
+
+-- 7.
+
+-- 8.
+
+-- 9.
+
+-- 10.
+
+-- 11.
+
+-- ################ INSERCIONES PARA CONSULTAS MULTITABLA(Composicion Externa) ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
+
+-- 1.
+
+-- 2.
+
+-- 3.
+
+-- 4.
+
+-- 5.
+
+-- 6.
+
+-- 7.
+
+-- 8.
+
+-- 9.
+
+-- 10.
+
+-- 11.
+
+-- 12.
+
+-- ################ INSERCIONES PARA CONSULTAS RESUMEN ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
+
+-- 1.
+
+-- 2.
+
+-- 3.
+
+-- 4.
+
+-- 5.
 
 -- 6.
 
@@ -413,126 +564,67 @@ INSERT INTO telefono_oficina (oficina_id, tipo_id, numero) VALUES
 
 -- 19.
 
+-- ################ INSERCIONES PARA SUBCONSULTAS ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
+
+-- 1.
+
+-- 2.
+
+-- 3.
+
+-- 4.
+
+-- 5.
+
+-- 6.
+
+-- 7.
+
+-- INSERCIONES PARA SUBCONSULTAS CON ALL Y ANY ------------------
+-- 8.
+
+-- 9.
+
+-- 10.
+
+-- INSERCIONES PARA SUBCONSULTAS CON IN Y NOT IN ------------------
+-- 11.
+
+-- 12.
+
+-- 13.
+
+-- 14.
+
+-- 15.
+
+-- 16.
+
+-- 17.
+
+-- INSERCIONES PARA SUBCONSULTAS CON EXITS Y NOT EXITS ------------------
+-- 18.
+
+-- 19.
+
 -- 20.
 
 -- 21.
 
--- 22.
+-- ################ INSERCIONES PARA CONSULTAS VARIADAS ###############
+-- Esta enumeracion de INSERCIONES esta basado en DbGarden.pdf
 
--- 23.
+-- 1.
 
--- 24.
+-- 2.
 
--- 25.
+-- 3.
 
--- 26.
+-- 4.
 
--- 27.
+-- 5.
 
--- 28.
+-- 6.
 
--- 29.
-
--- 30.
-
--- 31.
-
--- 32.
-
--- 33.
-
--- 34.
-
--- 35.
-
--- 36.
-
--- 37.
-
--- 38.
-
--- 39.
-
--- 40.
-
--- 41.
-
--- 42.
-
--- 43.
-
--- 44.
-
--- 45.
-
--- 46.
-
--- 47.
-
--- 48.
-
--- 49.
-
--- 50.
-
--- 51.
-
--- 52.
-
--- 53.
-
--- 54.
-
--- 55.
-
--- 56.
-
--- 57.
-
--- 58.
-
--- 59.
-
--- 60.
-
--- 61.
-
--- 62.
-
--- 63.
-
--- 64.
-
--- 65.
-
--- 66.
-
--- 67.
-
--- 68.
-
--- 69.
-
--- 70.
-
--- 71.
-
--- 72.
-
--- 73.
-
--- 74.
-
--- 75.
-
--- 76.
-
--- 77.
-
--- 78.
-
--- 79.
-
--- 80.
-
-
+-- 7.

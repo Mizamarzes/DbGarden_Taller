@@ -557,4 +557,72 @@ INSERT INTO telefono_oficina (oficina_id, tipo_id, numero) VALUES
 (13, 7, '915123456'),
 (14, 10, '961123456');
 
+INSERT INTO puesto(puesto) VALUES
+('Representante de Ventas');
 
+INSERT INTO empleado(nombre, apellido1, apellido2, extension, email, oficina_id, jefe_id, puesto_id)
+VALUES ('Juan', 'Contreras', 'Melendez', '1278', 'mizamarzes@gmail.com', 12, 1, 11);
+
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
+   ('El Carajo Ltda.', 5, 11, 6000.00),
+('Walmart', 10,11,10000.00);
+
+INSERT INTO direccion_cliente (cliente_id, pais_id, region_id, ciudad_id, detalle) VALUES 
+    (11, 11, 13, 13, 'Calle Secundaria #333'),
+	(12, 11, 12, 14, 'Calle Loco#623');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (11, 8, 1, '2024-10-11', 150.00),
+    (12, 7,1,'2008-04-25', 500.00 );
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2015-04-21', '2015-04-28', '2016-04-30', 4, 11, 12, 'Masapan');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (5, 1, 1, '2020-04-21', 850.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2020-05-20', '2020-05-28', '2020-05-25', 4, 5, 13, 'Aguapanela');
+
+INSERT INTO estado_pedido (estado) VALUES 
+    ('Rechazado');
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2009-05-01', '2009-05-01', '2009-05-01', 11, 5, NULL, 'Guanabana');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (7, 4, 2, '2010-01-11', 2450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2010-01-11', '2010-02-01', '2010-02-03', 4, 7, 14, 'Yuca');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (7, 4, 2, '2010-01-11', 3450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2010-01-11', '2010-01-14', '2010-01-16', 4, 7, 15, 'Papa con Flores');
+
+INSERT INTO pago (cliente_id, forma_pago_id, tipo_pago_id, fecha_pago, total) VALUES 
+    (11, 6, 4, '2008-01-11', 3450.00);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES 
+    ('2008-01-11', '2008-01-14', '2008-01-16', 4, 1, 16, 'Fertilizante la juanita');
+
+INSERT INTO gama_producto (descripcion_texto, descripcion_html, imagen) VALUES 
+    ('Ornamentales', '<p>decoracion.</p>', 'ornamental_accesorios.jpg');
+
+INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_stock) VALUES 
+    ('Cesped Tapizante', 1, '50x50x50 cm', 'Cesped GOD', 150),  
+    ('Trepadora', 2, '45x35x10 cm', 'LA TREPADORA', 120);
+
+INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) VALUES 
+    (11, 25.99, 7, 14.50),
+    (12, 35.99, 7, 25.50);
+
+INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_stock) VALUES 
+    ('Maraca', 11, '20x20x20 cm', 'Wakanda', 170),  
+    ('Liana', 11, '45x15x10 cm', 'League of legends', 220);
+
+INSERT INTO precio (producto_id, precio_venta, proveedor_id, precio_proveedor) VALUES 
+    (13, 35.99, 4, 20.50),
+    (14, 399.99, 4, 235.50);
