@@ -421,9 +421,9 @@
 
         ```mysql
         SELECT
-        	c.nombre AS cliente,
-        	e.nombre AS representante_ventas,
-        	e.apellido1 AS apellido
+          c.nombre AS cliente,
+          e.nombre AS representante_ventas,
+          e.apellido1 AS apellido
         FROM cliente AS c
         JOIN empleado AS e ON c.empleado_id = e.id;
         +-------------------------------------+----------------------+------------+
@@ -449,8 +449,8 @@
     
         ```mysql
         SELECT
-        	c.nombre AS cliente,
-        	e.nombre AS representante_ventas
+          c.nombre AS cliente,
+          e.nombre AS representante_ventas
         FROM pago AS p
         JOIN cliente AS c ON p.cliente_id = c.id
         JOIN empleado AS e ON e.id = c.empleado_id;
@@ -499,9 +499,9 @@
     
         ```mysql
         SELECT DISTINCT
-        	c.nombre AS cliente,
-        	e.nombre AS representante_ventas,
-        	o.nombre AS oficina
+          c.nombre AS cliente,
+          e.nombre AS representante_ventas,
+          o.nombre AS oficina
         FROM cliente AS c
         JOIN empleado AS e ON e.id = c.empleado_id
         JOIN oficina AS o ON e.oficina_id = o.id
@@ -552,8 +552,8 @@
     
         ```mysql
         SELECT
-        	o.nombre AS nombre_oficina,
-        	cc.nombre AS Ciudad
+          o.nombre AS nombre_oficina,
+          cc.nombre AS Ciudad
         
         FROM ciudad AS cc
         JOIN direccion_oficina AS do ON cc.id = do.ciudad_id
@@ -571,9 +571,9 @@
     
         ```mysql
         SELECT
-        	c.nombre AS cliente,
-        	e.nombre AS nombre_representante,
-        	cc.nombre AS ciudad_oficina
+          c.nombre AS cliente,
+          e.nombre AS nombre_representante,
+          cc.nombre AS ciudad_oficina
         FROM cliente AS c
         JOIN empleado AS e ON e.id = c.empleado_id
         JOIN oficina AS o ON o.id = e.oficina_id
@@ -629,20 +629,81 @@
     
      9. Devuelve un listado que muestre el nombre de cada empleados, el nombre  de su jefe y el nombre del jefe de sus jefe.  
     
-        ```
-        
+        ```mysql
+        SELECT 
+            e1.nombre AS empleado_nombre,
+            e2.nombre AS jefe_nombre,
+            e3.nombre AS jefe_de_jefe_nombre
+        FROM 
+            empleado e1
+        LEFT JOIN 
+            empleado e2 ON e1.jefe_id = e2.id
+        LEFT JOIN 
+            empleado e3 ON e2.jefe_id = e3.id;
+         +-----------------+-------------+---------------------+
+        | empleado_nombre | jefe_nombre | jefe_de_jefe_nombre |
+        +-----------------+-------------+---------------------+
+        | Juan            | NULL        | NULL                |
+        | María           | Juan        | NULL                |
+        | Carlos          | Juan        | NULL                |
+        | Laura           | María       | Juan                |
+        | Pedro           | María       | Juan                |
+        | Ana             | Carlos      | Juan                |
+        | Diego           | Carlos      | Juan                |
+        | Sofía           | Laura       | María               |
+        | Luis            | Laura       | María               |
+        | Elena           | Pedro       | María               |
+        | Juan            | Juan        | NULL                |
+        | Daniel          | NULL        | NULL                |
+        +-----------------+-------------+---------------------+   
         ```
     
      10. Devuelve el nombre de los clientes a los que no se les ha entregado a  tiempo un pedido.  
     
-         ```
+         ```mysql
+         SELECT
+         	c.nombre,
+         	p.fecha_esperada,
+         	p.fecha_entrega
+         FROM cliente AS c
+         JOIN pedido AS p ON p.cliente_id = c.id
+         WHERE p.fecha_esperada < p.fecha_entrega;
+         +-------------------------------------+----------------+---------------+
+         | nombre                              | fecha_esperada | fecha_entrega |
+         +-------------------------------------+----------------+---------------+
+         | El Carajo Ltda.                     | 2015-04-28     | 2016-04-30    |
+         | Floristería Primavera Eterna Ltda.  | 2010-02-01     | 2010-02-03    |
+         | Floristería Primavera Eterna Ltda.  | 2010-01-14     | 2010-01-16    |
+         | Jardines Verdes Ltda.               | 2008-01-14     | 2008-01-16    |
+         +-------------------------------------+----------------+---------------+
          
          ```
     
      11. Devuelve un listado de las diferentes gamas de producto que ha comprado  cada cliente.
     
-         ```
-         
+         ```mysql
+         SELECT
+         	c.nombre,
+         	gp.descripcion_texto
+         FROM cliente AS c
+         JOIN pedido AS p ON p.cliente_id = c.id
+         JOIN detalle_pedido AS dp ON dp.pedido_id = p.id
+         JOIN producto AS pro ON pro.id = dp.producto_id
+         JOIN gama_producto AS gp ON gp.id = pro.gama_id;
+         +-------------------------------------+--------------------------------------------------------------------+
+         | nombre                              | descripcion_texto                                                  |
+         +-------------------------------------+--------------------------------------------------------------------+
+         | Jardines Verdes Ltda.               | Herramienta manual para jardinería, ideal para trabajos precisos.  |
+         | Jardines Verdes Ltda.               | Tijeras de podar con mango ergonómico.                             |
+         | Floristería Bella Flor Inc.         | Manguera de jardín de 20 metros, resistente y flexible.            |
+         | Plantas y Flores S.A.               | Herramienta manual para jardinería, ideal para trabajos precisos.  |
+         | Jardinería Naturaleza Viva Ltda.    | Tijeras de podar con mango ergonómico.                             |
+         | Jardinería Naturaleza Viva Ltda.    | Manguera de jardín de 20 metros, resistente y flexible.            |
+         | Horticultura Verde y Fresca S.A.    | Herramienta manual para jardinería, ideal para trabajos precisos.  |
+         | Horticultura Verde y Fresca S.A.    | Tijeras de podar con mango ergonómico.                             |
+         | Verdor Jardines y Flores S.R.L.     | Manguera de jardín de 20 metros, resistente y flexible.            |
+         | Floristería Primavera Eterna Ltda.  | Herramienta manual para jardinería, ideal para trabajos precisos.  |
+         +-------------------------------------+--------------------------------------------------------------------+
          ```
     
      ## Consultas multitabla (Composición externa)
@@ -650,19 +711,138 @@
      ### Resuelva todas las consultas utilizando las cláusulas LEFT JOIN, RIGHT JOIN, NATURALLEFT JOIN y NATURAL RIGHT JOIN.
     
      1. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pago. 
+    
+        ```mysql
+        SELECT
+        	c.nombre
+        FROM cliente AS c
+        LEFT JOIN pago AS p ON p.cliente_id = c.id
+        WHERE p.cliente_id IS NULL;
+        +---------------------+
+        | nombre              |
+        +---------------------+
+        | Riot Games          |
+        | Cliente Fuenlabrada |
+        +---------------------+
+        ```
+    
      2. Devuelve un listado que muestre solamente los clientes que no han  realizado ningún pedido.
+    
+        ```mysql
+        SELECT
+        	c.nombre
+        FROM cliente AS c
+        LEFT JOIN pedido AS p ON p.cliente_id = c.id
+        WHERE p.cliente_id IS NULL;
+        +---------------------+
+        | nombre              |
+        +---------------------+
+        | Walmart             |
+        | Riot Games          |
+        | Cliente Fuenlabrada |
+        +---------------------+
+        ```
+    
      3. Devuelve un listado que muestre los clientes que no han realizado ningún  pago y los que no han realizado ningún pedido.
+    
+        ```mysql
+        SELECT
+        	c.nombre
+        FROM cliente AS c
+        LEFT JOIN pedido AS pe ON pe.cliente_id = c.id
+        LEFT JOIN pago AS p ON p.cliente_id = c.id
+        WHERE p.cliente_id IS NULL AND pe.cliente_id IS NULL;
+        +---------------------+
+        | nombre              |
+        +---------------------+
+        | Riot Games          |
+        | Cliente Fuenlabrada |
+        +---------------------+
+        ```
+    
      4. Devuelve un listado que muestre solamente los empleados que no tienen  una oficina asociada.
+    
+        ```mysql
+        SELECT
+        	e.id,
+        	e.nombre
+        FROM empleado AS e
+        LEFT JOIN oficina AS o ON o.id = e.oficina_id
+        WHERE o.id IS NULL;
+        +----+--------+
+        | id | nombre |
+        +----+--------+
+        | 13 | Camilo |
+        +----+--------+
+        ```
+    
      5. Devuelve un listado que muestre solamente los empleados que no tienen un  cliente asociado.
+    
+        ```mysql
+        SELECT
+        	c.nombre AS cliente,
+        	e.nombre AS empleado
+        FROM cliente AS c
+        LEFT JOIN empleado AS e ON e.id = c.empleado_id
+        WHERE c.empleado_id IS NULL;
+        +------------+----------+
+        | cliente    | empleado |
+        +------------+----------+
+        | La Marimba | NULL     |
+        +------------+----------+
+        ```
+    
      6. Devuelve un listado que muestre solamente los empleados que no tienen un  cliente asociado junto con los datos de la oficina donde trabajan.
+    
+        ```
+        
+        ```
+    
      7. Devuelve un listado que muestre los empleados que no tienen una oficina  asociada y los que no tienen un cliente asociado.  
+    
+        ```
+        
+        ```
+    
      8. Devuelve un listado de los productos que nunca han aparecido en un  pedido.
+    
+        ```
+        
+        ```
+    
+        
+    
      9. Devuelve un listado de los productos que nunca han aparecido en un  pedido. El resultado debe mostrar el nombre, la descripción y la imagen del  producto. 
+    
+        ```
+        
+        ```
+    
+        
+    
      10. Devuelve las oficinas donde no trabajan ninguno de los empleados que  hayan sido los representantes de ventas de algún cliente que haya realizado  la compra de algún producto de la gama Frutales. 
+    
+         ```
+         
+         ```
+    
+         
+    
      11. Devuelve un listado con los clientes que han realizado algún pedido pero no  han realizado ningún pago.
+    
+         ```
+         
+         ```
+    
+         
+    
      12. Devuelve un listado con los datos de los empleados que no tienen clientes  asociados y el nombre de su jefe asociado.
     
-     
+         ```
+         
+         ```
+    
+          
     
      ## Consultas resumen
     

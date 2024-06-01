@@ -269,23 +269,76 @@ LEFT JOIN
     empleado e2 ON e1.jefe_id = e2.id;
 
 -- 9.
+SELECT 
+    e1.nombre AS empleado_nombre,
+    e2.nombre AS jefe_nombre,
+    e3.nombre AS jefe_de_jefe_nombre
+FROM 
+    empleado e1
+LEFT JOIN 
+    empleado e2 ON e1.jefe_id = e2.id
+LEFT JOIN 
+    empleado e3 ON e2.jefe_id = e3.id;
 
 -- 10.
+SELECT
+	c.nombre,
+	p.fecha_esperada,
+	p.fecha_entrega
+FROM cliente AS c
+JOIN pedido AS p ON p.cliente_id = c.id
+WHERE p.fecha_esperada < p.fecha_entrega;
 
 -- 11.
+SELECT
+	c.nombre,
+	gp.descripcion_texto
+FROM cliente AS c
+JOIN pedido AS p ON p.cliente_id = c.id
+JOIN detalle_pedido AS dp ON dp.pedido_id = p.id
+JOIN producto AS pro ON pro.id = dp.producto_id
+JOIN gama_producto AS gp ON gp.id = pro.gama_id;
 
 -- ################ CONSULTAS MULTITABLA(Composicion Externa) ###############
 -- Esta enumeracion de consultas esta basado en DbGarden.pdf
 
 -- 1.
+SELECT
+	c.nombre
+FROM cliente AS c
+LEFT JOIN pago AS p ON p.cliente_id = c.id
+WHERE p.cliente_id IS NULL;
 
 -- 2.
+SELECT
+	c.nombre
+FROM cliente AS c
+LEFT JOIN pedido AS p ON p.cliente_id = c.id
+WHERE p.cliente_id IS NULL;
 
 -- 3.
+SELECT
+	c.nombre
+FROM cliente AS c
+LEFT JOIN pedido AS pe ON pe.cliente_id = c.id
+LEFT JOIN pago AS p ON p.cliente_id = c.id
+WHERE p.cliente_id IS NULL AND pe.cliente_id IS NULL;
 
 -- 4.
+SELECT
+	e.id,
+	e.nombre
+FROM empleado AS e
+LEFT JOIN oficina AS o ON o.id = e.oficina_id
+WHERE o.id IS NULL;
 
 -- 5.
+SELECT
+	c.nombre AS cliente,
+	e.nombre AS empleado
+FROM cliente AS c
+LEFT JOIN empleado AS e ON e.id = c.empleado_id
+WHERE c.empleado_id IS NULL;
 
 -- 6.
 

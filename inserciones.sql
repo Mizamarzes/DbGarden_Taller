@@ -527,7 +527,15 @@ VALUES (14, 11, 11, 15, 'Avenida de la Muerte, 65');
 
 -- 4.
 
+INSERT INTO empleado (nombre, apellido1, apellido2, extension, email, oficina_id, jefe_id, puesto_id) VALUES 
+    ('Camilo', 'Rodriguez', 'Pérez', '4330', 'cccold@example.com', NULL, 1, 5);
+
 -- 5.
+INSERT INTO empleado (nombre, apellido1, apellido2, extension, email, oficina_id, jefe_id, puesto_id) VALUES 
+    ('Pedro', 'Pascal', 'LOLO', '2710', 'ateteKAKA@example.com', NULL, 1, 2);
+
+INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
+    ('La Marimba', NULL, NULL, 1000.00);
 
 -- 6.
 
