@@ -780,66 +780,165 @@
     
         ```mysql
         SELECT
-        	c.nombre AS cliente,
         	e.nombre AS empleado
         FROM cliente AS c
-        LEFT JOIN empleado AS e ON e.id = c.empleado_id
+        RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+        LEFT JOIN oficina AS o ON o.id = e.oficina_id
         WHERE c.empleado_id IS NULL;
-        +------------+----------+
-        | cliente    | empleado |
-        +------------+----------+
-        | La Marimba | NULL     |
-        +------------+----------+
+        +----------+
+        | empleado |
+        +----------+
+        | Camilo   |
+        | Pedro    |
+        +----------+
         ```
     
      6. Devuelve un listado que muestre solamente los empleados que no tienen un  cliente asociado junto con los datos de la oficina donde trabajan.
     
-        ```
-        
+        ```mysql
+        SELECT
+        	e.nombre AS empleado,
+        	o.nombre AS oficina
+        FROM cliente AS c
+        RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+        LEFT JOIN oficina AS o ON o.id = e.oficina_id
+        WHERE c.empleado_id IS NULL;
+        +----------+---------+
+        | empleado | oficina |
+        +----------+---------+
+        | Camilo   | NULL    |
+        | Pedro    | NULL    |
+        +----------+---------+
         ```
     
      7. Devuelve un listado que muestre los empleados que no tienen una oficina  asociada y los que no tienen un cliente asociado.  
     
-        ```
-        
+        ```mysql
+        SELECT
+        	e.nombre AS empleado
+        FROM cliente AS c
+        RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+        LEFT JOIN oficina AS o ON o.id = e.oficina_id
+        WHERE c.empleado_id IS NULL AND e.oficina_id IS NULL;
+        +----------+
+        | empleado |
+        +----------+
+        | Camilo   |
+        | Pedro    |
+        +----------+
         ```
     
      8. Devuelve un listado de los productos que nunca han aparecido en un  pedido.
     
+        ```mysql
+        SELECT
+        	p.nombre
+        FROM producto AS p
+        LEFT JOIN detalle_pedido AS dp ON dp.producto_id=p.id
+        WHERE dp.pedido_id IS NULL;
+        +------------------+
+        | nombre           |
+        +------------------+
+        | Cesped Tapizante |
+        | Trepadora        |
+        | Maraca           |
+        | Liana            |
+        +------------------+
         ```
-        
-        ```
-    
-        
     
      9. Devuelve un listado de los productos que nunca han aparecido en un  pedido. El resultado debe mostrar el nombre, la descripción y la imagen del  producto. 
     
-        ```
+        ```mysql
+        SELECT
+        	p.nombre,
+        	p.descripcion,
+        	gp.imagen
+        FROM producto AS p
+        LEFT JOIN detalle_pedido AS dp ON dp.producto_id=p.id
+        JOIN gama_producto AS gp ON gp.id = p.gama_id
+        WHERE dp.pedido_id IS NULL;
+        +------------------+-------------------+---------------------------+
+        | nombre           | descripcion       | imagen                    |
+        +------------------+-------------------+---------------------------+
+        | Cesped Tapizante | Cesped GOD        | herramienta_manual.jpg    |
+        | Trepadora        | LA TREPADORA      | tijeras_podar.jpg         |
+        | Maraca           | Wakanda           | ornamental_accesorios.jpg |
+        | Liana            | League of legends | ornamental_accesorios.jpg |
+        +------------------+-------------------+---------------------------+
         
         ```
-    
-        
     
      10. Devuelve las oficinas donde no trabajan ninguno de los empleados que  hayan sido los representantes de ventas de algún cliente que haya realizado  la compra de algún producto de la gama Frutales. 
     
+         ```mysql
+         SELECT 
+         	o.nombre AS oficina
+         FROM oficina AS o
+         LEFT JOIN (
+             SELECT DISTINCT e.oficina_id
+             FROM empleado AS e
+             JOIN cliente AS c ON e.id = c.empleado_id
+             JOIN pedido AS p ON c.id = p.cliente_id
+             JOIN detalle_pedido AS dp ON p.id = dp.pedido_id
+             JOIN producto AS pro ON dp.producto_id = pro.id
+             JOIN gama_producto AS gp ON pro.gama_id = gp.id
+             WHERE gp.descripcion_texto = 'Frutales'
+         ) AS subquery ON o.id = subquery.oficina_id
+         WHERE subquery.oficina_id IS NULL;
+         +---------------------------+
+         | oficina                   |
+         +---------------------------+
+         | Oficina principal         |
+         | Sucursal A                |
+         | Sucursal B                |
+         | Sucursal C                |
+         | Sucursal D                |
+         | Sucursal E                |
+         | Sucursal F                |
+         | Sucursal G                |
+         | Sucursal H                |
+         | Sucursal I                |
+         | Oficina Central Sevilla   |
+         | Oficina Central Barcelona |
+         | Oficina Central Madrid    |
+         | Oficina Central Valencia  |
+         | Oficina Fuenlabrada       |
+         +---------------------------+
          ```
-         
-         ```
-    
-         
     
      11. Devuelve un listado con los clientes que han realizado algún pedido pero no  han realizado ningún pago.
     
+         ```mysql
+         SELECT 
+         	c.nombre
+         FROM cliente AS c
+         RIGHT JOIN pedido AS p ON p.cliente_id = c.id
+         LEFT JOIN pago AS pag ON pag.cliente_id = c.id
+         WHERE pag.cliente_id IS NULL;
+         +------------+
+         | nombre     |
+         +------------+
+         | La Marimba |
+         +------------+
          ```
-         
-         ```
-    
-         
     
      12. Devuelve un listado con los datos de los empleados que no tienen clientes  asociados y el nombre de su jefe asociado.
     
-         ```
-         
+         ```mysql
+         SELECT 
+         	e1.nombre AS empleado,
+         	e1.apellido1 AS apellido,
+         	e2.nombre AS jefe
+         FROM empleado AS e1
+         LEFT JOIN empleado AS e2 ON e1.jefe_id = e2.id
+         LEFT JOIN cliente AS c ON c.empleado_id = e1.id
+         WHERE c.empleado_id IS NULL;
+         +----------+-----------+------+
+         | empleado | apellido  | jefe |
+         +----------+-----------+------+
+         | Camilo   | Rodriguez | Juan |
+         | Pedro    | Pascal    | Juan |
+         +----------+-----------+------+
          ```
     
           

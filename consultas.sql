@@ -334,25 +334,79 @@ WHERE o.id IS NULL;
 
 -- 5.
 SELECT
-	c.nombre AS cliente,
 	e.nombre AS empleado
 FROM cliente AS c
-LEFT JOIN empleado AS e ON e.id = c.empleado_id
+RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+LEFT JOIN oficina AS o ON o.id = e.oficina_id
 WHERE c.empleado_id IS NULL;
 
 -- 6.
+SELECT
+	e.nombre AS empleado,
+	o.nombre AS oficina
+FROM cliente AS c
+RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+LEFT JOIN oficina AS o ON o.id = e.oficina_id
+WHERE c.empleado_id IS NULL;
 
 -- 7.
+SELECT
+	e.nombre AS empleado
+FROM cliente AS c
+RIGHT JOIN empleado AS e ON e.id = c.empleado_id
+LEFT JOIN oficina AS o ON o.id = e.oficina_id
+WHERE c.empleado_id IS NULL AND e.oficina_id IS NULL;
 
 -- 8.
+SELECT
+	p.nombre
+FROM producto AS p
+LEFT JOIN detalle_pedido AS dp ON dp.producto_id=p.id
+WHERE dp.pedido_id IS NULL;
 
 -- 9.
+SELECT
+	p.nombre,
+	p.descripcion,
+	gp.imagen
+FROM producto AS p
+LEFT JOIN detalle_pedido AS dp ON dp.producto_id=p.id
+JOIN gama_producto AS gp ON gp.id = p.gama_id
+WHERE dp.pedido_id IS NULL;
 
 -- 10.
+SELECT 
+	o.nombre AS oficina
+FROM oficina AS o
+LEFT JOIN (
+    SELECT DISTINCT e.oficina_id
+    FROM empleado AS e
+    JOIN cliente AS c ON e.id = c.empleado_id
+    JOIN pedido AS p ON c.id = p.cliente_id
+    JOIN detalle_pedido AS dp ON p.id = dp.pedido_id
+    JOIN producto AS pro ON dp.producto_id = pro.id
+    JOIN gama_producto AS gp ON pro.gama_id = gp.id
+    WHERE gp.descripcion_texto = 'Frutales'
+) AS subquery ON o.id = subquery.oficina_id
+WHERE subquery.oficina_id IS NULL;
 
 -- 11.
+SELECT 
+	c.nombre
+FROM cliente AS c
+RIGHT JOIN pedido AS p ON p.cliente_id = c.id
+LEFT JOIN pago AS pag ON pag.cliente_id = c.id
+WHERE pag.cliente_id IS NULL;
 
 -- 12.
+SELECT 
+	e1.nombre AS empleado,
+	e1.apellido1 AS apellido,
+	e2.nombre AS jefe
+FROM empleado AS e1
+LEFT JOIN empleado AS e2 ON e1.jefe_id = e2.id
+LEFT JOIN cliente AS c ON c.empleado_id = e1.id
+WHERE c.empleado_id IS NULL;
 
 -- ################ CONSULTAS RESUMEN ###############
 -- Esta enumeracion de consultas esta basado en DbGarden.pdf

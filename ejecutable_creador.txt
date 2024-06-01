@@ -657,3 +657,19 @@ INSERT INTO empleado (nombre, apellido1, apellido2, extension, email, oficina_id
 
 INSERT INTO cliente (nombre, contacto_id, empleado_id, limite_credito) VALUES 
     ('La Marimba', NULL, NULL, 1000.00);
+
+INSERT INTO gama_producto (descripcion_texto) VALUES
+('Frutales');
+
+INSERT INTO producto (nombre, gama_id, dimensiones, descripcion, cantidad_en_stock) VALUES
+('Manzana', 12, '10x10x10', 'Producto de gama Frutales', 200),
+('Naranja', 12, '15x15x15', 'Producto de gama Frutales', 150),
+('Borojo', 12, '5x5x5', 'Producto de gama Frutales', 300);
+
+INSERT INTO pedido (fecha_pedido, fecha_esperada, fecha_entrega, estado_pedido_id, cliente_id, pago_id, comentarios) VALUES
+('2024-01-01', '2024-01-05', '2024-01-03', 1, 15, NULL, 'Primera compra'),
+('2024-02-01', '2024-02-05', '2024-02-03', 1, 15, NULL, 'Segunda compra');
+
+INSERT INTO detalle_pedido (producto_id, pedido_id, cantidad, numero_linea) VALUES
+(15, 17, 17, 1),
+(16, 18, 18, 2);
