@@ -6,7 +6,7 @@ Las consultas se encuentran en el archivo consultas.sql
 
 ## DIAGRAMA ER - gardenDb
 
-![gardendbER](F:\codigos\campuslands\DbGarden_Taller-2\gardendbER.png)
+![gardendbER](https://github.com/Mizamarzes/DbGarden_Taller/blob/master/gardendbER.png)
 
 ## Tablas
 
